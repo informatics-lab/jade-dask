@@ -30,7 +30,7 @@ jupyter:
   restart: always
   image: jupyterhub/jupyterhub
   volumes:
-    - jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
+    - /usr/local/share/jade/docker/master/jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
   environment:
     - VIRTUAL_HOST=jupyter.informaticslab.co.uk
     # - LETSENCRYPT_HOST=jupyter.informaticslab.co.uk

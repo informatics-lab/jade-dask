@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# install deps
+yum install -y git
+
 # install docker
 curl -sSL https://get.docker.com/ | sh
 
@@ -12,10 +15,12 @@ chmod +x /usr/local/bin/docker-compose
 usermod -aG docker ec2-user
 
 # get keys
-s3get jade-secrets/jade-secrets
+aws s3 cp s3://jade-secrets/jade-secrets jade-secrets
+cat jade-secrets >> ~/.bashrc
+rm jade-secrets
 
 # get config
-git clone https://github.com/met-office-lab/jade.git
+git clone https://github.com/met-office-lab/jade.git /usr/local/share/jade
 
 # run config
-docker-compose up -d -f jade/docker/master
+/usr/local/bin/docker-compose -f /usr/local/share/jade/docker/master/docker-compose.yml up -d
