@@ -64,3 +64,15 @@ resource "aws_elb" "jade" {
     Name = "jade-elb"
   }
 }
+
+resource "aws_route53_record" "jupyterdev" {
+  zone_id = "Z3USS9SVLB2LY1"
+  name = "dev.jupyter.informaticslab.co.uk."
+  type = "A"
+
+  alias {
+    name = "${aws_elb.jade.dns_name}"
+    zone_id = "${aws_elb.jade.zone_id}"
+    evaluate_target_health = true
+  }
+}

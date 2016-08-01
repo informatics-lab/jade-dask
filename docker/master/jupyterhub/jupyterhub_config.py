@@ -24,7 +24,7 @@ c.JupyterHub.db_url = pjoin(runtime_dir, 'jupyterhub.sqlite')
 # use GitHub OAuthenticator for local users
 
 c.JupyterHub.authenticator_class = 'oauthenticator.LocalGitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = 'https://jupyter.informaticslab.co.uk/hub/oauth_callback'
+c.GitHubOAuthenticator.oauth_callback_url = 'https://dev.jupyter.informaticslab.co.uk/hub/oauth_callback'
 # create system users that don't exist yet
 c.LocalAuthenticator.create_system_users = True
 
