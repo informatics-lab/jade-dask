@@ -32,7 +32,6 @@ jupyter:
   volumes:
     - /usr/local/share/jade/docker/master/jupyterhub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
   environment:
-    - VIRTUAL_PROTO=https
     - VIRTUAL_HOST=dev.jupyter.informaticslab.co.uk
     # - LETSENCRYPT_HOST=jupyter.informaticslab.co.uk
     # - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
