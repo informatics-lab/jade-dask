@@ -27,6 +27,7 @@ jupyter:
   restart: always
   build: ./jupyterhub
   command: [jupyterhub, --no-ssl]
+  env_file: /usr/local/share/jade/jade-secrets
   volumes:
     - /usr/local/share/jade/docker/master/jupyterhub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
   environment:

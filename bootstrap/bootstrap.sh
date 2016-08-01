@@ -14,13 +14,11 @@ curl -L https://github.com/docker/compose/releases/download/1.6.0/docker-compose
 chmod +x /usr/local/bin/docker-compose
 usermod -aG docker ec2-user
 
-# get keys
-aws s3 cp s3://jade-secrets/jade-secrets jade-secrets
-cat jade-secrets >> ~/.bashrc
-rm jade-secrets
-
 # get config
 git clone https://github.com/met-office-lab/jade.git /usr/local/share/jade
+
+# get keys
+aws s3 cp s3://jade-secrets/jade-secrets /usr/local/share/jade/jade-secrets
 
 # run config
 /usr/local/bin/docker-compose -f /usr/local/share/jade/docker/master/docker-compose.yml up -d
