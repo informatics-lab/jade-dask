@@ -1,7 +1,37 @@
-nginx:
-  image: nginx
+proxy:
   restart: always
+  image: jwilder/nginx-proxy
+  volumes:
+  - /var/run/docker.sock:/tmp/docker.sock:ro
+  - /usr/share/nginx/html
+  - /etc/nginx/vhost.d
+  - ./certs:/etc/nginx/certs:ro
+  - ./htpasswd:/etc/nginx/htpasswd
+  ports:
+  - 80:80
+  - 443:443
+  log_driver: "syslog"
+  log_opt:
+   syslog-address: "tcp://monitor.informaticslab.co.uk:5000"
+
+# letsencrypt:
+#   restart: always
+#   image: jrcs/letsencrypt-nginx-proxy-companion
+#   volumes:
+#    - ./certs:/etc/nginx/certs:rw
+#    - /var/run/docker.sock:/var/run/docker.sock:ro
+#   volumes_from:
+#    - proxy
+#   log_driver: "syslog"
+#   log_opt:
+#    syslog-address: "tcp://monitor.informaticslab.co.uk:5000"
 
 jupyter:
-
-swarm:
+  restart: always
+  image: jupyterhub/jupyterhub
+  volumes:
+    - jupyter/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
+  environment:
+    - VIRTUAL_HOST=jupyter.informaticslab.co.uk
+    # - LETSENCRYPT_HOST=jupyter.informaticslab.co.uk
+    # - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
