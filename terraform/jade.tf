@@ -8,7 +8,7 @@ resource "aws_instance" "jademaster" {
   key_name              = "gateway"
   user_data             = "${file("bootstrap/bootstrap.sh")}"
   iam_instance_profile  = "jade-secrets"
-  security_groups        = ["default", "jademaster"]
+  security_groups        = ["default", "${aws_security_group.jademaster.name}"]
 
   tags = {
     Name = "jademaster"
@@ -41,6 +41,13 @@ resource "aws_elb" "jade" {
   listener {
     instance_port = 80
     instance_protocol = "http"
+    lb_port = 80
+    lb_protocol = "http"
+  }
+
+  listener {
+    instance_port = 80
+    instance_protocol = "http"
     lb_port = 443
     lb_protocol = "https"
     ssl_certificate_id = "arn:aws:acm:eu-west-1:536099501702:certificate/90e79c0e-1b87-4848-a9a0-5731a32905a0"
@@ -50,7 +57,7 @@ resource "aws_elb" "jade" {
     healthy_threshold = 2
     unhealthy_threshold = 2
     timeout = 3
-    target = "HTTP:80/"
+    target = "HTTP:80/hub/logo"
     interval = 30
   }
 
