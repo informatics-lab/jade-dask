@@ -28,6 +28,16 @@ c.GitHubOAuthenticator.oauth_callback_url = 'https://dev.jupyter.informaticslab.
 # create system users that don't exist yet
 c.LocalAuthenticator.create_system_users = True
 
+c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
+# Spawn user containers from this image
+c.DockerSpawner.container_image = 'jupyter/scipy-notebook'
+
+# Have the Spawner override the Docker run command
+c.DockerSpawner.extra_create_kwargs.update({
+    'command': '/usr/local/bin/start-singleuser.sh'
+})
+
+
 # specify users and admin
 c.Authenticator.whitelist = {'niallrobinson'}
 c.Authenticator.admin_users = {'niallrobinson'}
