@@ -1,0 +1,7 @@
+nginx:
+  image: nginx
+  restart: always
+
+jupyter:
+
+swarm:
