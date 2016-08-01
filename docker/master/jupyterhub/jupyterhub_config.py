@@ -11,7 +11,7 @@ if not os.path.exists(ssl_dir):
 
 
 # https on :443
-c.JupyterHub.port = 80
+c.JupyterHub.port = 8000
 # c.JupyterHub.ssl_key = pjoin(ssl_dir, 'ssl.key')
 # c.JupyterHub.ssl_cert = pjoin(ssl_dir, 'ssl.pem')
 
