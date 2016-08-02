@@ -40,9 +40,9 @@ resource "aws_elb" "jade" {
 
   listener {
     instance_port = 80
-    instance_protocol = "http"
+    instance_protocol = "ssl"
     lb_port = 443
-    lb_protocol = "https"
+    lb_protocol = "ssl"
     ssl_certificate_id = "arn:aws:acm:eu-west-1:536099501702:certificate/90e79c0e-1b87-4848-a9a0-5731a32905a0"
   }
 
