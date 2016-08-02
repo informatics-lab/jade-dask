@@ -20,9 +20,5 @@ git clone https://github.com/met-office-lab/jade.git /usr/local/share/jade
 # get keys
 aws s3 cp s3://jade-secrets/jade-secrets /usr/local/share/jade/jade-secrets
 
-# get certificate 
-mkdir -p /usr/local/share/certs/
-openssl req -x509 -newkey rsa:2048 -keyout /usr/local/share/certs/key.pem -out /usr/local/share/certs/cert.pem -days 60 -nodes -subj "/C=UK/ST=Devon/L=Exeter/O=Met Office/OU=Informatics Lab/CN=$(hostname -f)"
-
 # run config
 /usr/local/bin/docker-compose -f /usr/local/share/jade/docker/master/docker-compose.yml up -d

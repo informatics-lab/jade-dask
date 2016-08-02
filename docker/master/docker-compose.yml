@@ -13,26 +13,23 @@ proxy:
   - 80:80
   - 443:443
 
-# letsencrypt:
-#   restart: always
-#   image: jrcs/letsencrypt-nginx-proxy-companion
-#   volumes:
-#    - ./certs:/etc/nginx/certs:rw
-#    - /var/run/docker.sock:/var/run/docker.sock:ro
-#   volumes_from:
-#    - proxy
-#   log_driver: "syslog"
-#   log_opt:
-#    syslog-address: "tcp://monitor.informaticslab.co.uk:5000"
+letsencrypt:
+  restart: always
+  image: jrcs/letsencrypt-nginx-proxy-companion
+  volumes:
+   - ./certs:/etc/nginx/certs:rw
+   - /var/run/docker.sock:/var/run/docker.sock:ro
+  volumes_from:
+   - proxy
 
 jupyter:
   restart: always
   build: ./jupyterhub
-  command: [jupyterhub]
+  command: [jupyterhub, --no-ssl]
   env_file: /usr/local/share/jade/jade-secrets
   volumes:
     - /usr/local/share/jade/docker/master/jupyterhub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
   environment:
     - VIRTUAL_HOST=dev.jupyter.informaticslab.co.uk
-    # - LETSENCRYPT_HOST=jupyter.informaticslab.co.uk
-    # - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
+    - LETSENCRYPT_HOST=dev.jupyter.informaticslab.co.uk
+    - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk

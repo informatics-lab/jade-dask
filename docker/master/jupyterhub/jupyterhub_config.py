@@ -6,11 +6,7 @@ pjoin = os.path.join
 
 runtime_dir = os.path.join('/srv/jupyterhub')
 
-ssl_dir = '/usr/local/share/certs/'
-
 c.JupyterHub.port = 8000
-c.JupyterHub.ssl_key = pjoin(ssl_dir, 'key.pem')
-c.JupyterHub.ssl_cert = pjoin(ssl_dir, 'cert.pem')
 
 c.JupyterHub.db_url = pjoin(runtime_dir, 'jupyterhub.sqlite')
 
