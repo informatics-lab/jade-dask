@@ -21,7 +21,7 @@ git clone https://github.com/met-office-lab/jade.git /usr/local/share/jade
 aws s3 cp s3://jade-secrets/jade-secrets /usr/local/share/jade/jade-secrets
 
 # build scientific environment image
-docker build -t atmossci-notebook /usr/local/share/jade/docker/notebook-slave/atmossci-notebook
+docker pull quay.io/informaticslab/atmossci-notebook
 
 # run config
 /usr/local/bin/docker-compose -f /usr/local/share/jade/docker/master/docker-compose.yml up -d
