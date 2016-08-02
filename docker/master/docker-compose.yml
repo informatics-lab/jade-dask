@@ -11,6 +11,7 @@ proxy:
     - DEFAULT_HOST=dev.jupyter.informaticslab.co.uk
   ports:
   - 80:80
+  - 443:443
 
 # letsencrypt:
 #   restart: always

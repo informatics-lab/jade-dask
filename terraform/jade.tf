@@ -26,6 +26,13 @@ resource "aws_security_group" "jademaster" {
       cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
       from_port = 0
       to_port = 0
@@ -39,7 +46,7 @@ resource "aws_elb" "jade" {
   availability_zones = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 
   listener {
-    instance_port = 443
+    instance_port = 80
     instance_protocol = "ssl"
     lb_port = 443
     lb_protocol = "ssl"
