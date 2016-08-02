@@ -15,11 +15,6 @@ resource "aws_instance" "jademaster" {
   }
 }
 
-resource "aws_eip" "jademaster" {
-  instance = "${aws_instance.jademaster.id}"
-  vpc = true
-}
-
 resource "aws_security_group" "jademaster" {
   name = "jademaster"
   description = "Allow jade traffic"
@@ -50,6 +45,6 @@ resource "aws_route53_record" "jupyterdev" {
   zone_id = "Z3USS9SVLB2LY1"
   name = "dev.jupyter.informaticslab.co.uk."
   type = "A"
-  ttl = "300"
-  records = ["${aws_eip.jademaster.public_ip}"]
+  ttl = "60"
+  records = ["${aws_instance.jademaster.public_ip}"]
 }
