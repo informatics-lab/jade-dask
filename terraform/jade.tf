@@ -13,6 +13,10 @@ resource "aws_instance" "jademaster" {
   tags = {
     Name = "jademaster"
   }
+
+  root_block_device = {
+    volume_size = 20
+  }
 }
 
 resource "aws_security_group" "jademaster" {
