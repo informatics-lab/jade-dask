@@ -7,6 +7,7 @@ pjoin = os.path.join
 runtime_dir = os.path.join('/srv/jupyterhub')
 
 c.JupyterHub.port = 8000
+c.JupyterHub.hub_ip = '0.0.0.0'
 
 c.JupyterHub.db_url = pjoin(runtime_dir, 'jupyterhub.sqlite')
 
