@@ -19,7 +19,10 @@ c.LocalAuthenticator.create_system_users = True
 
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 # Spawn user containers from this image
-c.DockerSpawner.container_image = 'quay.io/informaticslab/atmossci-notebook'
+c.DockerSpawner.container_image = 'jupyter/scipy-notebook'
+c.DockerSpawner.use_internal_ip = True
+c.DockerSpawner.links = {'master_jupyter_1': 'jupyterhub'}
+c.DockerSpawner.hub_ip_connect = 'jupyterhub'
 
 # Have the Spawner override the Docker run command
 c.DockerSpawner.extra_create_kwargs.update({

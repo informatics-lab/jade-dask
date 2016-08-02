@@ -32,5 +32,6 @@ jupyter:
     - /var/run/docker.sock:/var/run/docker.sock
   environment:
     - VIRTUAL_HOST=dev.jupyter.informaticslab.co.uk
+    - VIRTUAL_PORT=8000
     - LETSENCRYPT_HOST=dev.jupyter.informaticslab.co.uk
     - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
