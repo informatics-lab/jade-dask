@@ -39,7 +39,7 @@ resource "aws_elb" "jade" {
   availability_zones = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 
   listener {
-    instance_port = 80
+    instance_port = 443
     instance_protocol = "ssl"
     lb_port = 443
     lb_protocol = "ssl"
