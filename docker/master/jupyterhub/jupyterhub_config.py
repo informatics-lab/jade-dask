@@ -19,7 +19,7 @@ c.LocalAuthenticator.create_system_users = True
 
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 # Spawn user containers from this image
-c.DockerSpawner.container_image = 'jupyter/scipy-notebook'
+c.DockerSpawner.container_image = 'jupyter/base-notebook'
 c.DockerSpawner.use_internal_ip = True
 c.DockerSpawner.links = {'master_jupyter_1': 'jupyterhub'}
 c.DockerSpawner.hub_ip_connect = 'jupyterhub'
