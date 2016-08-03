@@ -16,7 +16,7 @@ RUN apt-get install -y curl grep sed dpkg && \
     curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
     dpkg -i tini.deb && \
     rm tini.deb && \
-    apt-get clean
+    apt-get clean   
 
 ENV PATH /opt/conda/bin:$PATH
 
@@ -24,8 +24,9 @@ RUN conda update -y conda
 
 WORKDIR /root
 
-RUN conda install -y -c scitools -c conda-forge scipy boto iris cartopy PySide jupyter
-RUN pip install git+https://github.com/met-office-lab/SHARPpy.git@remove_su_check
+RUN conda install -y -c scitools scipy boto iris cartopy jupyter
+# RUN conda install -y -c conda-forge PySide 
+# RUN pip install git+https://github.com/met-office-lab/SHARPpy.git@remove_su_check
 
 RUN jupyter notebook --generate-config
 ADD jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
