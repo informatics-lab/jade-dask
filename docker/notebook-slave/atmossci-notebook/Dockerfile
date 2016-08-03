@@ -31,12 +31,13 @@ RUN pip install jupyter_dashboards && jupyter dashboards quick-setup --sys-prefi
 RUN conda create -y -n ipykernel_py2 python=2 ipykernel
 RUN bash -c "source activate ipykernel_py2 && python -m ipykernel install --user"
 
-# RUN update-ca-certificates -f
-# RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
-# RUN chmod +x /usr/local/bin/lein
-# RUN apt-get install make
-# RUN git clone https://github.com/roryk/clojupyter
-# RUN cd clojupyter && make && make install
+RUN update-ca-certificates -f
+RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
+RUN chmod +x /usr/local/bin/lein
+RUN apt-get install -y make default-jre
+RUN git clone https://github.com/roryk/clojupyter
+RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
+RUN cd clojupyter && make && make install
 
 
 RUN jupyter notebook --generate-config
