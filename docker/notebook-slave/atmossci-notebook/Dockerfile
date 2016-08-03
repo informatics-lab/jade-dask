@@ -25,11 +25,22 @@ RUN conda update -y conda
 WORKDIR /root
 
 RUN conda install -y -c scitools scipy boto iris cartopy jupyter
-# RUN conda install -y -c conda-forge PySide 
-# RUN pip install git+https://github.com/met-office-lab/SHARPpy.git@remove_su_check
+
+
+RUN conda create -y -n ipykernel_py2 python=2 ipykernel
+RUN bash -c "source activate ipykernel_py2 && python -m ipykernel install --user"
+
+# RUN update-ca-certificates -f
+# RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
+# RUN chmod +x /usr/local/bin/lein
+# RUN apt-get install make
+# RUN git clone https://github.com/roryk/clojupyter
+# RUN cd clojupyter && make && make install
+
 
 RUN jupyter notebook --generate-config
 ADD jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+
 
 RUN mkdir -p /usr/local/share/notebooks
 WORKDIR /usr/local/share/notebooks
