@@ -1,4 +1,5 @@
 import os
+from traitlets import Unicode
 
 from dockerspawner import DockerSpawner
 

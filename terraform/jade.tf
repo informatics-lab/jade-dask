@@ -47,7 +47,7 @@ resource "aws_security_group" "jademaster" {
 
 resource "aws_route53_record" "jupyterdev" {
   zone_id = "Z3USS9SVLB2LY1"
-  name = "dev.jupyter.informaticslab.co.uk."
+  name = "devel.jupyter.informaticslab.co.uk."
   type = "A"
   ttl = "60"
   records = ["${aws_instance.jademaster.public_ip}"]
