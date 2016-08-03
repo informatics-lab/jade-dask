@@ -28,9 +28,9 @@ c.DockerSpawner.hub_ip_connect = 'jupyterhub'
 
 
 # Have the Spawner override the Docker run command
-c.DockerSpawner.extra_create_kwargs.update({
-    'command': '/usr/local/bin/start-singleuser.sh'
-})
+# c.DockerSpawner.extra_create_kwargs.update({
+#     'command': '/usr/local/bin/start-singleuser.sh'
+# })
 
 
 # specify users and admin
