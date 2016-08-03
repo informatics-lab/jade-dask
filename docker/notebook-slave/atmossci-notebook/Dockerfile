@@ -26,6 +26,7 @@ WORKDIR /root
 
 RUN conda install -y -c scitools scipy boto iris cartopy jupyter
 
+RUN pip install jupyter_dashboards && jupyter dashboards quick-setup --sys-prefix
 
 RUN conda create -y -n ipykernel_py2 python=2 ipykernel
 RUN bash -c "source activate ipykernel_py2 && python -m ipykernel install --user"
