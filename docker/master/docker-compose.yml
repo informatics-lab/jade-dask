@@ -8,7 +8,7 @@ proxy:
   - /mnt/jade-notebooks/certs:/etc/nginx/certs:ro
   - ./htpasswd:/etc/nginx/htpasswd
   environment:
-    - DEFAULT_HOST=dev.jupyter.informaticslab.co.uk
+    - DEFAULT_HOST=devel.jupyter.informaticslab.co.uk
   ports:
   - 80:80
   - 443:443
@@ -32,7 +32,7 @@ jupyter:
     - /var/run/docker.sock:/var/run/docker.sock
     - /mnt/jade-notebooks/home:/mnt/jade-notebooks/home
   environment:
-    - VIRTUAL_HOST=dev.jupyter.informaticslab.co.uk
+    - VIRTUAL_HOST=devel.jupyter.informaticslab.co.uk
     - VIRTUAL_PORT=8000
-    - LETSENCRYPT_HOST=dev.jupyter.informaticslab.co.uk
+    - LETSENCRYPT_HOST=devel.jupyter.informaticslab.co.uk
     - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
