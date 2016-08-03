@@ -23,7 +23,9 @@ c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 c.DockerSpawner.container_image = 'jupyter/base-notebook'
 c.DockerSpawner.use_internal_ip = True
 c.DockerSpawner.links = {'master_jupyter_1': 'jupyterhub'}
+c.DockerSpawner.volumes = {'/mnt/jade-notebooks/home/{username}': '/usr/local/share/notebooks'}
 c.DockerSpawner.hub_ip_connect = 'jupyterhub'
+
 
 # Have the Spawner override the Docker run command
 c.DockerSpawner.extra_create_kwargs.update({
@@ -32,5 +34,5 @@ c.DockerSpawner.extra_create_kwargs.update({
 
 
 # specify users and admin
-c.Authenticator.whitelist = {'niallrobinson'}
-c.Authenticator.admin_users = {'niallrobinson'}
+c.Authenticator.whitelist = {'niallrobinson', 'jacobtomlinson'}
+c.Authenticator.admin_users = {'niallrobinson', 'jacobtomlinson'}
