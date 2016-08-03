@@ -20,7 +20,7 @@ c.LocalAuthenticator.create_system_users = True
 
 c.JupyterHub.spawner_class = 'customspawner.CustomSpawner'
 # Spawn user containers from this image
-c.DockerSpawner.container_image = 'jupyter/base-notebook'
+c.DockerSpawner.container_image = 'informaticslab/atmossci-notebook'
 c.DockerSpawner.use_internal_ip = True
 c.DockerSpawner.links = {'master_jupyter_1': 'jupyterhub'}
 c.DockerSpawner.volumes = {'/mnt/jade-notebooks/home/{username}': '/usr/local/share/notebooks'}
