@@ -18,7 +18,7 @@ c.GitHubOAuthenticator.oauth_callback_url = 'https://dev.jupyter.informaticslab.
 # create system users that don't exist yet
 c.LocalAuthenticator.create_system_users = True
 
-c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
+c.JupyterHub.spawner_class = 'customspawner.CustomSpawner'
 # Spawn user containers from this image
 c.DockerSpawner.container_image = 'jupyter/base-notebook'
 c.DockerSpawner.use_internal_ip = True
