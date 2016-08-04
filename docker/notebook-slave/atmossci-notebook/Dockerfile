@@ -19,34 +19,59 @@ RUN apt-get install -y curl grep sed dpkg && \
     apt-get clean   
 
 ENV PATH /opt/conda/bin:$PATH
-
 RUN conda update -y conda
 
 WORKDIR /root
 
-RUN conda install -y -c scitools scipy boto iris cartopy jupyter
+RUN apt-get install -y make cmake
 
-RUN pip install jupyter_dashboards && jupyter dashboards quick-setup --sys-prefix
+# Python 3.4
+RUN conda create --name py34 -y python=3.4
+RUN apt-get install -y build-essential git cmake libqt4-dev libphonon-dev python2.7-dev libxml2-dev libxslt1-dev qtmobility-dev libqtwebkit-dev
+RUN bash -c "source activate py34 && \
+             conda install -y scipy boto jupyter"
+RUN bash -c "source activate py34 && \
+             conda install -y -c scitools iris cartopy"
+# RUN bash -c "source activate py34 && \
+#              git clone https://github.com/PySide/pyside-setup.git pyside-setup && \
+#              cd pyside-setup && \
+#              python setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.4 && \
+#              cd .. && \
+#              rm -rf ./pyside-setup && \
+#              pip install jupyter_dashboards && jupyter dashboards quick-setup --sys-prefix"
 
-RUN conda create -y -n ipykernel_py2 python=2 ipykernel
-RUN bash -c "source activate ipykernel_py2 && python -m ipykernel install --user"
+# # Python 2
+# RUN conda create -y -n py2 python=2 ipykernel
+# RUN bash -c "source activate ipykernel_py2 && python -m ipykernel install --user"
 
-RUN update-ca-certificates -f
-RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
-RUN chmod +x /usr/local/bin/lein
-RUN apt-get install -y make default-jre
-RUN git clone https://github.com/roryk/clojupyter
-RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
-RUN cd clojupyter && make && make install
+# # Clojure
+# RUN update-ca-certificates -f
+# RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
+# RUN chmod +x /usr/local/bin/lein
+# RUN apt-get install -y default-jre
+# RUN git clone https://github.com/roryk/clojupyter
+# RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
+# RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
+
+# # R
+# RUN conda create -y -n r -c r r-essentials
 
 
-RUN jupyter notebook --generate-config
-ADD jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+# Configure environment
+# ENV SHELL /bin/bash
+# ENV NB_USER root
+# ENV NB_UID 1000
+# ENV HOME /home/$NB_USER
+# ENV LC_ALL en_UK.UTF-8
+# ENV LANG en_UK.UTF-8
+# ENV LANGUAGE en_UK.UTF-8
 
+# RUN jupyter notebook --generate-config
+# ADD jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
-RUN mkdir -p /usr/local/share/notebooks
-WORKDIR /usr/local/share/notebooks
+# RUN mkdir -p /usr/local/share/notebooks
+# WORKDIR /usr/local/share/notebooks
 
-EXPOSE 8888
-ENTRYPOINT ["tini", "--"]
-CMD ["jupyter", "notebook"]
+# EXPOSE 8888
+# ENTRYPOINT ["tini", "--"]
+# CMD ["jupyter", "notebook"]
