@@ -16,7 +16,7 @@ RUN apt-get install -y curl grep sed dpkg && \
     curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
     dpkg -i tini.deb && \
     rm tini.deb && \
-    apt-get clean   
+    apt-get clean
 
 ENV PATH /opt/conda/bin:$PATH
 RUN conda update -y conda
@@ -32,6 +32,10 @@ RUN bash -c "source activate py34 && \
              conda install -y scipy boto jupyter"
 RUN bash -c "source activate py34 && \
              conda install -y -c scitools iris cartopy"
+
+
+
+
 # RUN bash -c "source activate py34 && \
 #              git clone https://github.com/PySide/pyside-setup.git pyside-setup && \
 #              cd pyside-setup && \
@@ -40,11 +44,11 @@ RUN bash -c "source activate py34 && \
 #              rm -rf ./pyside-setup && \
 #              pip install jupyter_dashboards && jupyter dashboards quick-setup --sys-prefix"
 
-# # Python 2
-# RUN conda create -y -n py2 python=2 ipykernel
-# RUN bash -c "source activate ipykernel_py2 && python -m ipykernel install --user"
+# Python 2
+RUN conda create -y -n py2 python=2 ipykernel
+RUN bash -c "source activate py2 && python -m ipykernel install --user"
 
-# # Clojure
+# Clojure
 # RUN update-ca-certificates -f
 # RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
 # RUN chmod +x /usr/local/bin/lein
@@ -53,25 +57,22 @@ RUN bash -c "source activate py34 && \
 # RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 # RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
 
-# # R
-# RUN conda create -y -n r -c r r-essentials
+# R
+RUN conda create -y -n r -c r r-essentials
 
 
-# Configure environment
-# ENV SHELL /bin/bash
-# ENV NB_USER root
-# ENV NB_UID 1000
-# ENV HOME /home/$NB_USER
-# ENV LC_ALL en_UK.UTF-8
-# ENV LANG en_UK.UTF-8
-# ENV LANGUAGE en_UK.UTF-8
 
-# RUN jupyter notebook --generate-config
-# ADD jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+# Install JupyterHub to get the jupyterhub-singleuser startup script
+RUN pip --no-cache-dir install 'jupyterhub==0.5'
+COPY start-singleuser.sh /usr/local/bin/
 
-# RUN mkdir -p /usr/local/share/notebooks
-# WORKDIR /usr/local/share/notebooks
+RUN bash -c "source activate py34 && \
+             jupyter notebook --generate-config"
+ADD jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
-# EXPOSE 8888
-# ENTRYPOINT ["tini", "--"]
-# CMD ["jupyter", "notebook"]
+RUN mkdir -p /usr/local/share/notebooks
+WORKDIR /usr/local/share/notebooks
+
+EXPOSE 8888
+ENTRYPOINT ["tini", "--"]
+CMD ["source", "activate", "py34", "&&", "/usr/local/bin/start-singleuser.sh"]
