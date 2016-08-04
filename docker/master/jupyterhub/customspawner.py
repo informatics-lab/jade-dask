@@ -23,7 +23,6 @@ class CustomSpawner(DockerSpawner):\
         home = self.home_path
         def preexec():
             try:
-                os.makedirs(home, 0o755, exist_ok=True)
                 shutil.copytree('/mnt/jade-notebooks/home/skel', home)
             except e:
                 print(e)
