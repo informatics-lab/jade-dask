@@ -5,10 +5,10 @@ proxy:
   - /var/run/docker.sock:/tmp/docker.sock:ro
   - /usr/share/nginx/html
   - /etc/nginx/vhost.d
-  - ./certs:/etc/nginx/certs:ro
+  - /mnt/jade-notebooks/certs:/etc/nginx/certs:ro
   - ./htpasswd:/etc/nginx/htpasswd
   environment:
-    - DEFAULT_HOST=dev.jupyter.informaticslab.co.uk
+    - DEFAULT_HOST=devel.jupyter.informaticslab.co.uk
   ports:
   - 80:80
   - 443:443
@@ -17,7 +17,7 @@ letsencrypt:
   restart: always
   image: thomastweets/docker-letsencrypt-nginx-proxy-companion
   volumes:
-   - ./certs:/etc/nginx/certs:rw
+   - /mnt/jade-notebooks/certs:/etc/nginx/certs:rw
    - /var/run/docker.sock:/var/run/docker.sock:ro
   volumes_from:
    - proxy
@@ -30,8 +30,9 @@ jupyter:
   volumes:
     - /usr/local/share/jade/docker/master/jupyterhub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
     - /var/run/docker.sock:/var/run/docker.sock
+    - /mnt/jade-notebooks/home:/mnt/jade-notebooks/home
   environment:
-    - VIRTUAL_HOST=dev.jupyter.informaticslab.co.uk
+    - VIRTUAL_HOST=devel.jupyter.informaticslab.co.uk
     - VIRTUAL_PORT=8000
-    - LETSENCRYPT_HOST=dev.jupyter.informaticslab.co.uk
+    - LETSENCRYPT_HOST=devel.jupyter.informaticslab.co.uk
     - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
