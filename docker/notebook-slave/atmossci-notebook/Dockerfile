@@ -73,7 +73,8 @@ RUN wget -q https://raw.githubusercontent.com/jupyter/jupyterhub/master/scripts/
 
 RUN bash -c "source activate py34 && \
              jupyter notebook --generate-config"
-ADD jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+ADD jupyter_notebook_config.py /root/.jupyter/
+ADD ipython_notebook_config.py /etc/ipython/
 
 RUN mkdir -p /usr/local/share/notebooks
 WORKDIR /usr/local/share/notebooks
