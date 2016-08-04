@@ -47,7 +47,7 @@ RUN bash -c "source activate py34 && \
 RUN conda create -y -n py2 python=2 ipykernel
 RUN bash -c "source activate py2 && python -m ipykernel install --user"
 
-Clojure
+#Clojure
 RUN update-ca-certificates -f
 RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
 RUN chmod +x /usr/local/bin/lein
