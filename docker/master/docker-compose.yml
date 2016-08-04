@@ -36,3 +36,19 @@ jupyter:
     - VIRTUAL_PORT=8000
     - LETSENCRYPT_HOST=devel.jupyter.informaticslab.co.uk
     - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
+
+swarm-master:
+  restart: always
+  image: swarm
+  ports:
+    - 4000:4000
+  command: "manage -H :4000 --replication --advertise localhost:4000 consul://consul:8500"
+  links:
+    - consul
+
+consul:
+  restart: always
+  image: progrium/consul
+  ports:
+    - 8500:8500
+  command: "-server -bootstrap"

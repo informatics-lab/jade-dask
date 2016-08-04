@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # install deps
 yum install -y git nfs-utils
 
@@ -10,6 +8,10 @@ mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/p
 
 # install docker
 curl -sSL https://get.docker.com/ | sh
+
+# Make docker listen on tcp
+sed -i '/^OPTIONS/ d' /etc/sysconfig/docker
+echo "OPTIONS=\"--default-ulimit nofile=1024:4096 -H tcp://0.0.0.0:2375\"" >> /etc/sysconfig/docker
 
 # Start Docker
 service docker start
@@ -26,8 +28,7 @@ git clone https://github.com/met-office-lab/jade.git /usr/local/share/jade
 aws s3 cp s3://jade-secrets/jade-secrets /usr/local/share/jade/jade-secrets
 
 # build scientific environment image
-docker pull jupyter/base-notebook
 docker pull quay.io/informaticslab/atmossci-notebook
 
 # run config
-/usr/local/bin/docker-compose -f /usr/local/share/jade/docker/master/docker-compose.yml up -d
+docker run -d swarm join --advertise=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'):2375 consul://${CONSUL_HOST}:8500
