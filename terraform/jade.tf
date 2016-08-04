@@ -52,3 +52,22 @@ resource "aws_route53_record" "jupyterdev" {
   ttl = "60"
   records = ["${aws_instance.jademaster.public_ip}"]
 }
+
+resource "aws_launch_configuration" "notebook-slaves" {
+    name = "notebook-slave"
+    image_id = "ami-f9dd458a"
+    instance_type = "t1.micro"
+    user_data = "${file("bootstrap/slave-bootstrap.sh")}"
+}
+
+resource "aws_autoscaling_group" "notebook-slaves" {
+  name = "notebook-slaves"
+  max_size = 1
+  min_size = 1
+  desired_capacity = 1
+  health_check_grace_period = 300
+  health_check_type = "EC2"
+  force_delete = true
+  launch_configuration = "${aws_launch_configuration.foobar.name}"
+
+}
