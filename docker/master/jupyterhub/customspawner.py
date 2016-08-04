@@ -23,6 +23,7 @@ class CustomSpawner(DockerSpawner):\
         home = self.home_path
         def preexec():
             try:
+                self.log.debug("Copying skel to home/{}".format(self.user.name))
                 shutil.copytree('/mnt/jade-notebooks/home/skel', home)
             except e:
                 print(e)
