@@ -34,35 +34,33 @@ RUN bash -c "source activate py34 && \
              conda install -y -c scitools iris cartopy"
 
 
-
-
 # RUN bash -c "source activate py34 && \
 #              git clone https://github.com/PySide/pyside-setup.git pyside-setup && \
 #              cd pyside-setup && \
 #              python setup.py bdist_wheel --qmake=/usr/bin/qmake-qt4 --version=1.2.4 && \
 #              cd .. && \
-#              rm -rf ./pyside-setup && \
-#              pip install jupyter_dashboards && jupyter dashboards quick-setup --sys-prefix"
+#              rm -rf ./pyside-setup
+RUN bash -c "source activate py34 && \
+             pip install jupyter_dashboards && jupyter dashboards quick-setup --sys-prefix"
 
 # Python 2
 RUN conda create -y -n py2 python=2 ipykernel
 RUN bash -c "source activate py2 && python -m ipykernel install --user"
 
-# Clojure
-# RUN update-ca-certificates -f
-# RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
-# RUN chmod +x /usr/local/bin/lein
-# RUN apt-get install -y default-jre
-# RUN git clone https://github.com/roryk/clojupyter
-# RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
-# RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
+#Clojure
+RUN update-ca-certificates -f
+RUN curl -k https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/local/bin/lein
+RUN chmod +x /usr/local/bin/lein
+RUN apt-get install -y default-jre
+RUN git clone https://github.com/roryk/clojupyter
+RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
+RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
 
 # R
 RUN conda create -y -n r -c r r-essentials
 
 
-
- # Setup the JupyterHub single user entrypoint
+# Setup the JupyterHub single user entrypoint
 RUN bash -c "source activate py34 && \
              pip --no-cache-dir install 'jupyterhub==0.5'"
 RUN wget -q https://raw.githubusercontent.com/jupyter/jupyterhub/master/scripts/jupyterhub-singleuser -O /usr/local/bin/jupyterhub-singleuser && \
