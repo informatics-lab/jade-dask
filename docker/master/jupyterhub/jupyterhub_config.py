@@ -25,6 +25,7 @@ c.DockerSpawner.use_internal_ip = True
 c.DockerSpawner.links = {'master_jupyter_1': 'jupyterhub'}
 c.DockerSpawner.volumes = {'/mnt/jade-notebooks/home/{username}': '/usr/local/share/notebooks'}
 c.DockerSpawner.hub_ip_connect = 'jupyterhub'
+c.DockerSpawner.remove_containers = True
 
 
 # Have the Spawner override the Docker run command

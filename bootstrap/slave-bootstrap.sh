@@ -31,4 +31,4 @@ aws s3 cp s3://jade-secrets/jade-secrets /usr/local/share/jade/jade-secrets
 docker pull quay.io/informaticslab/atmossci-notebook
 
 # run config
-docker run -d swarm join --advertise=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'):2375 consul://${CONSUL_HOST}:8500
+docker run -d swarm join --advertise=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'):2375 consul://jupterhub:8500
