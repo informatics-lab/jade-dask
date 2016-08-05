@@ -1,5 +1,4 @@
 import shutil
-from tornado import gen
 from traitlets import Unicode
 
 from dockerspawner import DockerSpawner
@@ -41,6 +40,8 @@ class CustomSpawner(DockerSpawner):
     def start(self, *args, **kwargs):
         # look up mapping of node names to ip addresses
         info = yield self.docker('info')
+        for i in info:
+            self.log.info(i)
         num_nodes = int(info['DriverStatus'][3][1])
         node_info = info['DriverStatus'][4::5]
         self.node_info = {}
@@ -53,7 +54,7 @@ class CustomSpawner(DockerSpawner):
         self.create_home_dir()
 
         # start the container
-        yield super(CustomSpawner, self).start(*args, **kwargs)
+        super(CustomSpawner, self).start(*args, **kwargs)
 
         # figure out what the node is and then get its ip
         name = yield self.lookup_node_name()
