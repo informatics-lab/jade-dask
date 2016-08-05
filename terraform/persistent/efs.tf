@@ -1,4 +1,4 @@
-resource "aws_efs_file_system" "jade_notebooks" {
+resource "aws_efs_file_system" "jadenotebooks" {
   tags {
     Name = "jade-notebooks"
   }
