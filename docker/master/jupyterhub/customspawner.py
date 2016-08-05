@@ -27,4 +27,6 @@ class CustomSpawner(DockerSpawner):\
 
     def start(self, *args, **kwargs):
         self.create_home_dir()
-        return super(CustomSpawner, self).start(*args, **kwargs)
+        spawned = super(CustomSpawner, self).start(*args, **kwargs)
+        self.log.debug(spawned)
+        return spawned
