@@ -23,11 +23,12 @@ resource "aws_security_group_rule" "allow_from_master" {
 resource "aws_launch_configuration" "notebook-slaves" {
     name = "notebook-slave"
     image_id = "ami-f9dd458a"
-    instance_type = "t2.large"
+    instance_type = "m3.xlarge"
     key_name = "gateway"
     iam_instance_profile  = "jade-secrets"
     security_groups = ["default", "${aws_security_group.jadeslave.name}"]
-    user_data = "#!/bin/bash\necho \"${aws_instance.jademaster.private_ip} jupterhub\" >> /etc/hosts\n${file("bootstrap/slave-bootstrap.sh")}"
+    spot_price = "0.05"
+    user_data = "#!/bin/bash\nexport JUPYTERHUB_HOST=${aws_instance.jademaster.private_ip}\n${file("bootstrap/slave-bootstrap.sh")}"
 
     root_block_device = {
       volume_size = 20
@@ -45,4 +46,9 @@ resource "aws_autoscaling_group" "notebook-slaves" {
   force_delete = true
   launch_configuration = "${aws_launch_configuration.notebook-slaves.name}"
 
+  tag {
+    key = "Name"
+    value = "notebook-slave"
+    propagate_at_launch = true
+  }
 }
