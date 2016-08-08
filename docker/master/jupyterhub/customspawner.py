@@ -1,4 +1,5 @@
 import shutil
+from tornado import gen
 from traitlets import Unicode
 
 from dockerspawner import DockerSpawner
@@ -37,6 +38,7 @@ class CustomSpawner(DockerSpawner):
         except Exception as e:
             self.log.error(e)
 
+    @gen.coroutine
     def start(self, *args, **kwargs):
         # look up mapping of node names to ip addresses
         info = yield self.docker('info')
