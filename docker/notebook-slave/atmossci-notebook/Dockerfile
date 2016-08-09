@@ -81,15 +81,13 @@ RUN bash -c "source activate py34 && \
                 pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master && \
                 jupyter contrib nbextension install"
 
-
-# Install Notebook Examples extension
-# RUN bash -c "source activate py34 && pip install git+git://github.com/danielballan/nbexamples@init"
-# RUN mkdir -p /usr/local/share/notebooks/reviewed
-# RUN mkdir -p /usr/local/share/notebooks/unreviewed
-# RUN echo "\nc.Examples.reviewed_example_dir = '/usr/local/share/notebooks/reviewed'\n" >> /root/.jupyter/jupyter_notebook_config.py
-# RUN echo "c.Examples.unreviewed_example_dir = '/usr/local/share/notebooks/unreviewed'\n"  >> /root/.jupyter/jupyter_notebook_config.py
+# Scala
+RUN bash -c "source activate py34 && \
+             curl -L -o jupyter-scala https://git.io/vrHhi && \
+             chmod +x jupyter-scala && \
+             ./jupyter-scala && rm -f jupyter-scala"
 
 EXPOSE 8888
 ENTRYPOINT ["tini", "--"]
 CMD bash -c "source activate py34 && \
-             /srv/singleuser/singleuser.sh"
+             jupyter notebook --no-browser" #/srv/singleuser/singleuser.sh"
