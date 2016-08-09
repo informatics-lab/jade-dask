@@ -38,6 +38,8 @@ jupyter:
     - DOCKER_HOST=swarm-master:4000
   links:
     - swarm-master
+  ports:
+    - 8081:8081
 
 swarm-master:
   restart: always
