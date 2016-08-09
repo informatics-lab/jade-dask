@@ -34,7 +34,7 @@ docker pull quay.io/informaticslab/atmossci-notebook
 
 # pull examples notebooks
 git clone git@github.com:met-office-lab/example-notebooks.git /usr/local/share/jade/example-notebooks/
-rm ./example-notebooks/LICENSE
+rm /usr/local/share/jade/example-notebooks/LICENSE
 
 # run config
 docker run -d --add-host "jupyterhub:${JUPYTERHUB_HOST}" swarm join --advertise=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'):2375 consul://jupyterhub:8500
