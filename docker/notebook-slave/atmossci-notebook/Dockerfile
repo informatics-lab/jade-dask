@@ -60,6 +60,9 @@ RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
 RUN conda create -y -n r -c r r-essentials
 
 
+# Install Notebook Examples extension
+RUN pip install git+git://github.com/danielballan/nbexamples#init
+
 # Setup the JupyterHub single user entrypoint
 RUN bash -c "source activate py34 && \
              pip --no-cache-dir install 'jupyterhub==0.5'"
