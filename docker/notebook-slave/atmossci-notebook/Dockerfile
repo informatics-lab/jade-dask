@@ -57,8 +57,7 @@ RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc
 RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
 
 # R
-RUN conda create -y -n r -c r r-essentials
-
+RUN conda install -y -n py34 -c r r-essentials
 
 # Setup the JupyterHub single user entrypoint
 RUN bash -c "source activate py34 && \
@@ -76,6 +75,19 @@ ADD ipython_kernel_config.py /etc/ipython/
 
 RUN mkdir -p /usr/local/share/notebooks
 WORKDIR /usr/local/share/notebooks
+
+# NB Extensions
+RUN bash -c "source activate py34 && \
+                pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master && \
+                jupyter contrib nbextension install"
+
+
+# Install Notebook Examples extension
+# RUN bash -c "source activate py34 && pip install git+git://github.com/danielballan/nbexamples@init"
+# RUN mkdir -p /usr/local/share/notebooks/reviewed
+# RUN mkdir -p /usr/local/share/notebooks/unreviewed
+# RUN echo "\nc.Examples.reviewed_example_dir = '/usr/local/share/notebooks/reviewed'\n" >> /root/.jupyter/jupyter_notebook_config.py
+# RUN echo "c.Examples.unreviewed_example_dir = '/usr/local/share/notebooks/unreviewed'\n"  >> /root/.jupyter/jupyter_notebook_config.py
 
 EXPOSE 8888
 ENTRYPOINT ["tini", "--"]
