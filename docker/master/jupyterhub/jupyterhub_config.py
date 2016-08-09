@@ -2,6 +2,7 @@
 c = get_config()
 
 import os
+import requests
 pjoin = os.path.join
 
 runtime_dir = os.path.join('/srv/jupyterhub')
@@ -22,7 +23,7 @@ c.JupyterHub.spawner_class = 'customspawner.CustomSpawner'
 # Spawn user containers from this image
 c.DockerSpawner.container_image = 'quay.io/informaticslab/atmossci-notebook'
 c.DockerSpawner.volumes = {'/mnt/jade-notebooks/home/{username}': '/usr/local/share/notebooks'}
-c.DockerSpawner.hub_ip_connect = 'jupyterhub'
+c.DockerSpawner.hub_ip_connect = requests.get("http://169.254.169.254/latest/meta-data/local-ipv4").text
 c.DockerSpawner.remove_containers = True
 
 
