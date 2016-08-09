@@ -59,10 +59,6 @@ RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
 # R
 RUN conda create -y -n r -c r r-essentials
 
-
-# Install Notebook Examples extension
-RUN pip install git+git://github.com/danielballan/nbexamples#init
-
 # Setup the JupyterHub single user entrypoint
 RUN bash -c "source activate py34 && \
              pip --no-cache-dir install 'jupyterhub==0.5'"
@@ -79,6 +75,13 @@ ADD ipython_kernel_config.py /etc/ipython/
 
 RUN mkdir -p /usr/local/share/notebooks
 WORKDIR /usr/local/share/notebooks
+
+# Install Notebook Examples extension
+RUN pip install git+git://github.com/danielballan/nbexamples#init
+RUN mkdir -p /usr/local/share/notebooks/reviewed
+RUN mkdir -p /usr/local/share/notebooks/unreviewed
+echo "c.Examples.reviewed_example_dir = '/usr/local/share/notebooks/reviewed'" >> /root/.jupyter/jupyter_notebook_config.py
+echo "c.Examples.unreviewed_example_dir = '/usr/local/share/notebooks/unreviewed'"  >> /root/.jupyter/jupyter_notebook_config.py
 
 EXPOSE 8888
 ENTRYPOINT ["tini", "--"]
