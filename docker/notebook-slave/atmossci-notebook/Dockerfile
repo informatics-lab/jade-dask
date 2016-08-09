@@ -78,8 +78,8 @@ WORKDIR /usr/local/share/notebooks
 
 # NB Extensions
 RUN bash -c "source activate py34 && \
-                pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master && \
-                jupyter contrib nbextension install"
+                pip install https://github.com/met-office-lab/jupyter_contrib_nbextensions/tarball/master && \
+                jupyter contrib nbextension install --system"
 
 # Scala
 RUN bash -c "source activate py34 && \
