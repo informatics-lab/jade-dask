@@ -86,6 +86,8 @@ RUN bash -c "source activate py34 && \
 RUN bash -c "source activate py34 && \
                 conda install -y -c conda-forge jupyter_nbextensions_configurator"
 
+RUN echo "#!/usr/bin/env python3\nfrom jupyterhub.singleuser import main\nimport logging\nif __name__ == '__main__':\n    logging.basicConfig(level=logging.DEBUG)\n    main()" > /usr/local/bin/jupyterhub-singleuser
+
 EXPOSE 8888
 ENTRYPOINT ["tini", "--"]
 CMD bash -c "source activate py34 && \
