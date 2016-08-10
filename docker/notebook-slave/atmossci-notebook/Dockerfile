@@ -89,4 +89,4 @@ RUN bash -c "source activate py34 && \
 EXPOSE 8888
 ENTRYPOINT ["tini", "--"]
 CMD bash -c "source activate py34 && \
-             jupyter notebook --no-browser" #/srv/singleuser/singleuser.sh"
+             /srv/singleuser/singleuser.sh"
