@@ -76,18 +76,17 @@ ADD ipython_kernel_config.py /etc/ipython/
 RUN mkdir -p /usr/local/share/notebooks
 WORKDIR /usr/local/share/notebooks
 
-# NB Extensions
-RUN bash -c "source activate py34 && \
-                pip install https://github.com/met-office-lab/jupyter_contrib_nbextensions/tarball/master && \
-                jupyter contrib nbextension install --system"
-
 # Scala
 RUN bash -c "source activate py34 && \
              curl -L -o jupyter-scala https://git.io/vrHhi && \
              chmod +x jupyter-scala && \
              ./jupyter-scala && rm -f jupyter-scala"
 
+# NB Extensions
+RUN bash -c "source activate py34 && \
+                conda install -y -c conda-forge jupyter_nbextensions_configurator"
+
 EXPOSE 8888
 ENTRYPOINT ["tini", "--"]
 CMD bash -c "source activate py34 && \
-             /srv/singleuser/singleuser.sh"
+             jupyter notebook --no-browser" #/srv/singleuser/singleuser.sh"
