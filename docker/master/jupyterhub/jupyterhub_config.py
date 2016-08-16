@@ -22,5 +22,6 @@ c.JupyterHub.spawner_class = 'customspawner.CustomSpawner'
 # Spawn user containers from this image
 c.DockerSpawner.container_image = 'quay.io/informaticslab/atmossci-notebook'
 c.DockerSpawner.volumes = {'/mnt/jade-notebooks/home/{username}': '/usr/local/share/notebooks'}
+c.DockerSpawner.read_only_volumes = {'/mnt/jade-notebooks/data': '/data'}
 c.DockerSpawner.hub_ip_connect = requests.get("http://169.254.169.254/latest/meta-data/local-ipv4").text
 c.DockerSpawner.remove_containers = True
