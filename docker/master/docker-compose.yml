@@ -30,6 +30,7 @@ jupyter:
   volumes:
     - /usr/local/share/jade/docker/master/jupyterhub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
     - /mnt/jade-notebooks/home:/mnt/jade-notebooks/home
+    - /mnt/jade-notebooks/database:/mnt/jade-notebooks/database
   environment:
     - VIRTUAL_HOST=devel.jupyter.informaticslab.co.uk
     - VIRTUAL_PORT=8000
