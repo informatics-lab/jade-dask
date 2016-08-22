@@ -25,10 +25,6 @@ resource "aws_instance" "dask-scheduler" {
   user_data             = "${data.template_file.dask-scheduler-setup.rendered}" 
   security_groups       = ["default", "${aws_security_group.dask-scheduler.name}"]
 
-  root_block_device = {
-    volume_size         = 20
-  }
-
   tags {
     Name                = "dask-scheduler",
     environment         = "dev"
@@ -64,10 +60,6 @@ resource "aws_launch_configuration" "dask-workers" {
   user_data             = "${data.template_file.dask-worker-setup.rendered}"
 
   spot_price            = "0.1"
-
-  root_block_device = {
-    volume_size         = 20
-  }
 }
 
 resource "aws_autoscaling_group" "dask-workers" {
