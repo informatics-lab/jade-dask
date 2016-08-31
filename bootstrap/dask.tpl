@@ -6,4 +6,4 @@ runcmd:
     # Run required commands as non-root user
     - 'sudo -u ubuntu -H sh -c cd && /home/ubuntu/anaconda3/bin/conda install -y dask distributed'
     - 'sudo -u ubuntu -H sh -c cd && /home/ubuntu/anaconda3/bin/conda install -y -c scitools iris'
-    - 'sudo -u ubuntu -H sh -c cd && ${command}'
+    - 'sudo -u ubuntu -H sh -c "cd && ${command}"'
