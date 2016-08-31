@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# pull examples notebooks
+git clone git@github.com:met-office-lab/example-notebooks.git /usr/local/share/notebooks/Example\ Notebooks
+rm /usr/local/share/Example\ Notebooks/LICENSE
+
+# start single user server
 notebook_arg=""
 if [ -n "${NOTEBOOK_DIR:+x}" ]
 then
