@@ -2,7 +2,7 @@ FROM debian:8.5
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
+RUN apt-get clean && apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
     git mercurial subversion
 
@@ -45,6 +45,10 @@ RUN bash -c "source activate py34 && \
 
 # Python 2
 RUN conda create -y -n py2 python=2 ipykernel
+RUN bash -c "source activate py2 && \
+             conda install -y scipy boto jupyter"
+RUN bash -c "source activate py2 && \
+             conda install -y -c scitools iris cartopy"
 RUN bash -c "source activate py2 && python -m ipykernel install --user"
 
 #Clojure
@@ -57,8 +61,7 @@ RUN mkdir -p /etc/pki/tls/certs && ln -s /etc/ssl/certs/ca-certificates.crt /etc
 RUN cd clojupyter && make && make install && cd .. && rm -rf clojupyter
 
 # R
-RUN conda create -y -n r -c r r-essentials
-
+RUN conda install -y -n py34 -c r r-essentials
 
 # Setup the JupyterHub single user entrypoint
 RUN bash -c "source activate py34 && \
@@ -76,6 +79,18 @@ ADD ipython_kernel_config.py /etc/ipython/
 
 RUN mkdir -p /usr/local/share/notebooks
 WORKDIR /usr/local/share/notebooks
+
+# Scala
+RUN bash -c "source activate py34 && \
+             curl -L -o jupyter-scala https://git.io/vrHhi && \
+             chmod +x jupyter-scala && \
+             ./jupyter-scala && rm -f jupyter-scala"
+
+# NB Extensions
+RUN bash -c "source activate py34 && \
+                conda install -y -c conda-forge jupyter_nbextensions_configurator"
+
+RUN echo "#!/usr/bin/env python3\nfrom jupyterhub.singleuser import main\nimport logging\nif __name__ == '__main__':\n    logging.basicConfig(level=logging.DEBUG)\n    main()" > /usr/local/bin/jupyterhub-singleuser
 
 EXPOSE 8888
 ENTRYPOINT ["tini", "--"]

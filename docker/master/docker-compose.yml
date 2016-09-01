@@ -38,6 +38,16 @@ jupyter:
     - DOCKER_HOST=swarm-master:4000
   links:
     - swarm-master
+    - mysql
+  ports:
+    - 8081:8081
+
+mysql:
+  restart: always
+  image: mysql:latest
+  env_file: /usr/local/share/jade/jade-secrets
+  volumes:
+    - /mnt/jade-notebooks/database:/var/lib/mysql
 
 swarm-master:
   restart: always
