@@ -66,11 +66,12 @@ RUN conda install -y -n py34 -c r r-essentials
 # Setup the JupyterHub single user entrypoint
 RUN bash -c "source activate py34 && \
              pip --no-cache-dir install 'jupyterhub==0.5'"
-ADD start-singleuser.sh /srv/singleuser/singleuser.sh
+
 RUN wget -q https://raw.githubusercontent.com/jupyter/jupyterhub/master/scripts/jupyterhub-singleuser -O /usr/local/bin/jupyterhub-singleuser && \
     chmod 755 /usr/local/bin/jupyterhub-singleuser && \
-    mkdir -p /srv/singleuser/ && \
-    chmod 755 /srv/singleuser/singleuser.sh
+    mkdir -p /srv/singleuser/
+ADD start-singleuser.sh /srv/singleuser/singleuser.sh 
+RUN chmod 755 /srv/singleuser/singleuser.sh
 
 RUN bash -c "source activate py34 && \
              jupyter notebook --generate-config"
