@@ -6,7 +6,7 @@ yum install -y git nfs-utils
 # mount network fileystems
 service nfs start
 mkdir -p /mnt/jade-notebooks
-mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-841df44d.efs.eu-west-1.amazonaws.com:/ /mnt/jade-notebooks
+mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).${EFS_ID}.efs.eu-west-1.amazonaws.com:/ /mnt/jade-notebooks
 
 # install docker
 curl -sSL https://get.docker.com/ | sh
