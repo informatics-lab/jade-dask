@@ -2,7 +2,7 @@ FROM debian:8.5
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
+RUN apt-get clean && apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
     git mercurial subversion
 
@@ -45,6 +45,10 @@ RUN bash -c "source activate py34 && \
 
 # Python 2
 RUN conda create -y -n py2 python=2 ipykernel
+RUN bash -c "source activate py2 && \
+             conda install -y scipy boto jupyter"
+RUN bash -c "source activate py2 && \
+             conda install -y -c scitools iris cartopy"
 RUN bash -c "source activate py2 && python -m ipykernel install --user"
 
 #Clojure

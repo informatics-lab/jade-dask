@@ -27,8 +27,8 @@ resource "aws_launch_configuration" "notebook-slaves" {
     key_name = "gateway"
     iam_instance_profile  = "jade-secrets"
     security_groups = ["default", "${aws_security_group.jadeslave.name}"]
-    spot_price = "0.05"
-    user_data = "#!/bin/bash\nexport JUPYTERHUB_HOST=${aws_instance.jademaster.private_ip}\n${file("bootstrap/slave-bootstrap.sh")}"
+    spot_price = "0.06"
+    user_data = "#!/bin/bash\nexport JUPYTERHUB_HOST=${aws_instance.jademaster.private_ip}\nexport EFS_ID=${aws_efs_file_system.jadenotebooks.id}\n${file("bootstrap/slave-bootstrap.sh")}"
 
     root_block_device = {
       volume_size = 20
