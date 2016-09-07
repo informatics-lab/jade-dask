@@ -2,6 +2,7 @@
 set -e
 
 # pull examples notebooks
+rm -rf /usr/local/share/notebooks/Example\ Notebooks
 git clone https://github.com/met-office-lab/example-notebooks.git /usr/local/share/notebooks/Example\ Notebooks
 rm /usr/local/share/notebooks/Example\ Notebooks/LICENSE
 
