@@ -1,3 +1,7 @@
+variable scheduler-name {}
+variable worker-name {}
+variable dns {}
+
 data "template_file" "dask-scheduler-setup" {
     template            = "${file("bootstrap/dask.tpl")}"
 

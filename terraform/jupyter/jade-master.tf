@@ -1,3 +1,6 @@
+variable dns {}
+variable master-name {}
+
 resource "aws_instance" "jademaster" {
   ami                   = "ami-f9dd458a"
   instance_type         = "t2.large"

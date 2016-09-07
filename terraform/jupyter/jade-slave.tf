@@ -1,3 +1,5 @@
+variable worker-name {}
+
 resource "aws_security_group" "jadeslave" {
   name = "${var.worker-name}"
   description = "Allow jade traffic"
