@@ -23,7 +23,7 @@ usermod -aG docker ec2-user
 git clone https://github.com/met-office-lab/jade.git /usr/local/share/jade
 
 # get keys
-aws s3 cp s3://jade-secrets/jade-secrets /usr/local/share/jade/jade-secrets
+aws s3 cp s3://jade-secrets/${jade-secrets} /usr/local/share/jade/jade-secrets
 
 # run config
 ln -s /usr/local/share/jade/docker/master/${host_env_file} /usr/local/share/jade/docker/master/host.env
