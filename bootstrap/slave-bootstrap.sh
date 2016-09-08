@@ -4,7 +4,7 @@ export JUPYTERHUB_HOST="${jademaster_private_ip}"
 # install deps
 yum install -y git nfs-utils
 
-echo "${JUPYTERHUB_HOST} jupyterhub" >> /etc/hosts
+echo "${jademaster_private_ip} jupyterhub" >> /etc/hosts
 
 # mount network fileystems
 service nfs start
@@ -36,4 +36,4 @@ aws s3 cp s3://jade-secrets/jade-secrets /usr/local/share/jade/jade-secrets
 docker pull quay.io/informaticslab/atmossci-notebook
 
 # run config
-docker run -d --add-host "jupyterhub:${JUPYTERHUB_HOST}" swarm join --advertise=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'):2375 consul://jupyterhub:8500
+docker run -d --add-host "jupyterhub:${jademaster_private_ip}" swarm join --advertise=$(ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'):2375 consul://jupyterhub:8500
