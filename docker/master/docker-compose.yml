@@ -38,7 +38,7 @@ jupyter:
     - DOCKER_HOST=swarm-master:4000
   links:
     - swarm-master
-    - mysql
+    - mysql:mysql
   ports:
     - 8081:8081
 
