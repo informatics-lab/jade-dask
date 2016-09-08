@@ -30,6 +30,7 @@ jupyter:
     - /mnt/jade-notebooks/home:/mnt/jade-notebooks/home
   env_file:
     - host.env
+    - /usr/local/share/jade/jade-secrets
   environment:
     - VIRTUAL_PORT=8000
     - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
