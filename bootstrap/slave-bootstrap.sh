@@ -1,3 +1,6 @@
+#!/bin/bash
+export JUPYTERHUB_HOST="${jademaster_private_ip}"
+
 # install deps
 yum install -y git nfs-utils
 

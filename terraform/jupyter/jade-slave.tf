@@ -1,5 +1,13 @@
 variable worker-name {}
 
+data "template_file" "slave-bootstrap" {
+    template            = "${file("bootstrap/slave-bootstrap.sh")}"
+
+    vars = {
+      jademaster_private_ip = "${aws_instance.jademaster.private_ip}"
+    }
+}
+
 resource "aws_security_group" "jadeslave" {
   name = "${var.worker-name}"
   description = "Allow jade traffic"
@@ -30,7 +38,7 @@ resource "aws_launch_configuration" "notebook-slaves" {
     iam_instance_profile  = "jade-secrets"
     security_groups = ["default", "${aws_security_group.jadeslave.name}"]
     spot_price = "0.06"
-    user_data = "#!/bin/bash\nexport JUPYTERHUB_HOST=${aws_instance.jademaster.private_ip}\n${file("bootstrap/slave-bootstrap.sh")}"
+    user_data = "${data.template_file.slave-bootstrap.rendered}"
 
     root_block_device = {
       volume_size = 20

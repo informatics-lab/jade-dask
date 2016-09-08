@@ -1,11 +1,20 @@
 variable dns {}
 variable master-name {}
+variable host_env_file {}
+
+data "template_file" "master-bootstrap" {
+    template            = "${file("bootstrap/bootstrap.sh")}"
+
+    vars = {
+      host_env_file = "${var.host_env_file}"
+    }
+}
 
 resource "aws_instance" "jademaster" {
   ami                   = "ami-f9dd458a"
   instance_type         = "t2.large"
   key_name              = "gateway"
-  user_data             = "${file("bootstrap/bootstrap.sh")}"
+  user_data             = "${data.template_file.master-bootstrap.rendered}"
   iam_instance_profile  = "jade-secrets"
   security_groups        = ["default", "${aws_security_group.jademaster.name}"]
 

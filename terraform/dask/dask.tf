@@ -30,7 +30,7 @@ resource "aws_instance" "dask-scheduler" {
   security_groups       = ["default", "${aws_security_group.dask-scheduler.name}"]
 
   tags {
-    Name                = "${var.scheduler-name}",
+    Name                = "${var.scheduler-name}"
     environment         = "dev"
   }
 }
