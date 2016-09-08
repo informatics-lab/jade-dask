@@ -13,7 +13,7 @@ c.JupyterHub.db_url = "mysql://{}:{}@mysql/jupyter".format("root", os.environ['M
 
 # use GitHub OAuthenticator for local users
 c.JupyterHub.authenticator_class = 'oauthenticator.LocalGitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = os.getenv('OAUTH_CALLBACK_URL')
+c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
 
 # create system users that don't exist yet
 c.LocalAuthenticator.create_system_users = True
