@@ -1,5 +1,15 @@
+variable worker-name {}
+
+data "template_file" "slave-bootstrap" {
+    template            = "${file("bootstrap/slave-bootstrap.sh")}"
+
+    vars = {
+      jademaster_private_ip = "${aws_instance.jademaster.private_ip}"
+    }
+}
+
 resource "aws_security_group" "jadeslave" {
-  name = "jadeslave"
+  name = "${var.worker-name}"
   description = "Allow jade traffic"
 
   egress {
@@ -21,14 +31,14 @@ resource "aws_security_group_rule" "allow_from_master" {
 }
 
 resource "aws_launch_configuration" "notebook-slaves" {
-    name = "notebook-slave"
+    name = "${var.worker-name}"
     image_id = "ami-f9dd458a"
     instance_type = "m3.xlarge"
     key_name = "gateway"
     iam_instance_profile  = "jade-secrets"
     security_groups = ["default", "${aws_security_group.jadeslave.name}"]
     spot_price = "0.06"
-    user_data = "#!/bin/bash\nexport JUPYTERHUB_HOST=${aws_instance.jademaster.private_ip}\n${file("bootstrap/slave-bootstrap.sh")}"
+    user_data = "${data.template_file.slave-bootstrap.rendered}"
 
     root_block_device = {
       volume_size = 20
@@ -37,7 +47,7 @@ resource "aws_launch_configuration" "notebook-slaves" {
 
 resource "aws_autoscaling_group" "notebook-slaves" {
   availability_zones = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
-  name = "notebook-slaves"
+  name = "${var.worker-name}s"
   max_size = 1
   min_size = 1
   desired_capacity = 1
@@ -48,7 +58,7 @@ resource "aws_autoscaling_group" "notebook-slaves" {
 
   tag {
     key = "Name"
-    value = "notebook-slave"
+    value = "${var.worker-name}"
     propagate_at_launch = true
   }
 }

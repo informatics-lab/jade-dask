@@ -1,13 +1,25 @@
+variable dns {}
+variable master-name {}
+variable host_env_file {}
+
+data "template_file" "master-bootstrap" {
+    template            = "${file("bootstrap/bootstrap.sh")}"
+
+    vars = {
+      host_env_file = "${var.host_env_file}"
+    }
+}
+
 resource "aws_instance" "jademaster" {
   ami                   = "ami-f9dd458a"
   instance_type         = "t2.large"
   key_name              = "gateway"
-  user_data             = "${file("bootstrap/bootstrap.sh")}"
+  user_data             = "${data.template_file.master-bootstrap.rendered}"
   iam_instance_profile  = "jade-secrets"
   security_groups        = ["default", "${aws_security_group.jademaster.name}"]
 
   tags = {
-    Name = "jademaster"
+    Name = "${var.master-name}"
   }
 
   root_block_device = {
@@ -16,7 +28,7 @@ resource "aws_instance" "jademaster" {
 }
 
 resource "aws_security_group" "jademaster" {
-  name = "jademaster"
+  name = "${var.master-name}"
   description = "Allow jade traffic"
 
   ingress {
@@ -51,9 +63,9 @@ resource "aws_security_group_rule" "allow_from_slave" {
     source_security_group_id = "${aws_security_group.jadeslave.id}"
 }
 
-resource "aws_route53_record" "jupyterdev" {
+resource "aws_route53_record" "jupyter" {
   zone_id = "Z3USS9SVLB2LY1"
-  name = "devel.jupyter.informaticslab.co.uk."
+  name = "${var.dns}."
   type = "A"
   ttl = "60"
   records = ["${aws_instance.jademaster.public_ip}"]

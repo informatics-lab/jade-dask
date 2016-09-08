@@ -7,8 +7,6 @@ proxy:
   - /etc/nginx/vhost.d
   - /mnt/jade-notebooks/certs:/etc/nginx/certs:ro
   - ./htpasswd:/etc/nginx/htpasswd
-  environment:
-    - DEFAULT_HOST=devel.jupyter.informaticslab.co.uk
   ports:
   - 80:80
   - 443:443
@@ -30,10 +28,10 @@ jupyter:
   volumes:
     - /usr/local/share/jade/docker/master/jupyterhub/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
     - /mnt/jade-notebooks/home:/mnt/jade-notebooks/home
+  env_file:
+    - host.env
   environment:
-    - VIRTUAL_HOST=devel.jupyter.informaticslab.co.uk
     - VIRTUAL_PORT=8000
-    - LETSENCRYPT_HOST=devel.jupyter.informaticslab.co.uk
     - LETSENCRYPT_EMAIL=jacob.tomlinson@informaticslab.co.uk
     - DOCKER_HOST=swarm-master:4000
   links:

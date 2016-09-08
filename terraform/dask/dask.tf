@@ -1,3 +1,7 @@
+variable scheduler-name {}
+variable worker-name {}
+variable dns {}
+
 data "template_file" "dask-scheduler-setup" {
     template            = "${file("bootstrap/dask.tpl")}"
 
@@ -26,13 +30,13 @@ resource "aws_instance" "dask-scheduler" {
   security_groups       = ["default", "${aws_security_group.dask-scheduler.name}"]
 
   tags {
-    Name                = "dask-scheduler",
+    Name                = "${var.scheduler-name}"
     environment         = "dev"
   }
 }
 
 resource "aws_security_group" "dask-scheduler" {
-  name                  = "dask-scheduler"
+  name                  = "${var.scheduler-name}"
 
   ingress {
       from_port         = 8787
@@ -62,9 +66,9 @@ resource "aws_launch_configuration" "dask-workers" {
   spot_price            = "0.1"
 }
 
-resource "aws_autoscaling_group" "dask-workers" {
+resource "aws_autoscaling_group" "dask-worker" {
   availability_zones    = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
-  name                  = "dask-workers"
+  name                  = "${var.worker-name}s"
   max_size              = 1
   min_size              = 1
   desired_capacity      = 1
@@ -75,7 +79,7 @@ resource "aws_autoscaling_group" "dask-workers" {
 
   tag {
     key                 = "Name"
-    value               = "dask-worker"
+    value               = "${var.worker-name}"
     propagate_at_launch = true
   }
  
@@ -86,9 +90,9 @@ resource "aws_autoscaling_group" "dask-workers" {
   }
 }
 
-resource "aws_route53_record" "dask-dev" {
+resource "aws_route53_record" "dask" {
   zone_id = "Z3USS9SVLB2LY1"
-  name = "devel.dask.informaticslab.co.uk."
+  name = "${var.dns}."
   type = "A"
   ttl = "60"
   records = ["${aws_instance.dask-scheduler.private_ip}"]
