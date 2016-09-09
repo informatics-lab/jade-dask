@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export ENVIRONMENT=${environment}
+echo "Environment is $ENVIRONMENT"
 
 # install deps
 yum install -y git nfs-utils
