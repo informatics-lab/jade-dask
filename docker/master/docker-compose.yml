@@ -45,7 +45,7 @@ mysql:
   image: mysql:latest
   env_file: /usr/local/share/jade/jade-secrets
   volumes:
-    - /mnt/jade-notebooks/database:/var/lib/mysql
+    - /mnt/jade-notebooks/database/${ENVIRONMENT}:/var/lib/mysql
 
 swarm-master:
   restart: always
