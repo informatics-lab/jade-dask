@@ -54,7 +54,14 @@ class CustomSpawner(DockerSpawner):
         self.create_home_dir()
 
         # start the container
-        yield super(CustomSpawner, self).start(*args, **kwargs)
+
+        ## allow mounting fuse based filesystem
+        host_config = {
+            'devices': ['/dev/fuse'],
+            'cap_add': ['SYS_ADMIN', 'MKNOD']
+        }
+
+        yield super(CustomSpawner, self).start(extra_host_config=host_config, *args, **kwargs)
 
         # figure out what the node is and then get its ip
         name = yield self.lookup_node_name()
