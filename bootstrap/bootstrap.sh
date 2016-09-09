@@ -24,7 +24,8 @@ git clone https://github.com/met-office-lab/jade.git /usr/local/share/jade
 
 # get keys
 aws s3 cp s3://jade-secrets/${jade-secrets-file} /usr/local/share/jade/jade-secrets
+cat /usr/local/share/jade/jade-secrets /usr/local/share/jade/docker/master/host.env /usr/local/share/jade/docker/master/all.env
 
 # run config
-ln -s /usr/local/share/jade/docker/master/${host_env_file} /usr/local/share/jade/docker/master/host.env
+ln -s /usr/local/share/jade/docker/master/${host_env_file} /usr/local/share/jade/docker/master/all.env
 /usr/local/bin/docker-compose -f /usr/local/share/jade/docker/master/docker-compose.yml up -d

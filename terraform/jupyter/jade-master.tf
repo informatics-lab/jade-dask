@@ -1,12 +1,14 @@
 variable dns {}
 variable master-name {}
 variable host_env_file {}
+variable jade-secrets-file {}
 
 data "template_file" "master-bootstrap" {
     template            = "${file("bootstrap/bootstrap.sh")}"
 
     vars = {
       host_env_file = "${var.host_env_file}"
+      jade-secrets-file = "${var.jade-secrets-file}"
     }
 }
 
