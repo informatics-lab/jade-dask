@@ -90,6 +90,24 @@ resource "aws_autoscaling_group" "dask-worker" {
   }
 }
 
+resource "aws_autoscaling_schedule" "stop-dask-workers" {
+    scheduled_action_name = "stop-dask-workers"
+    min_size = 0
+    max_size = 0
+    desired_capacity = 0
+    recurrence = "0 19 * * 1-5"
+    autoscaling_group_name = "${aws_autoscaling_group.dask-worker.name}"
+}
+
+resource "aws_autoscaling_schedule" "start-dask-workers" {
+    scheduled_action_name = "start-dask-workers"
+    min_size = 0
+    max_size = 1
+    desired_capacity = 1
+    recurrence = "30 8 * * 1-5"
+    autoscaling_group_name = "${aws_autoscaling_group.dask-worker.name}"
+}
+
 resource "aws_route53_record" "dask" {
   zone_id = "Z3USS9SVLB2LY1"
   name = "${var.dns}."
