@@ -37,7 +37,7 @@ resource "aws_launch_configuration" "notebook-slaves" {
     key_name = "gateway"
     iam_instance_profile  = "jade-secrets"
     security_groups = ["default", "${aws_security_group.jadeslave.name}"]
-    spot_price = "0.06"
+    spot_price = "0.3"
     user_data = "${data.template_file.slave-bootstrap.rendered}"
 
     root_block_device = {
