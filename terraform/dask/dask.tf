@@ -27,6 +27,7 @@ resource "aws_instance" "dask-scheduler" {
   
   key_name              = "gateway"
   user_data             = "${data.template_file.dask-scheduler-setup.rendered}" 
+  iam_instance_profile  = "jade-secrets"
   security_groups       = ["default", "${aws_security_group.dask-scheduler.name}"]
 
   tags {
@@ -61,6 +62,7 @@ resource "aws_launch_configuration" "dask-workers" {
   instance_type         = "m3.large"
 
   key_name              = "gateway"
+  iam_instance_profile  = "jade-secrets"
   user_data             = "${data.template_file.dask-worker-setup.rendered}"
 
   spot_price            = "0.1"
