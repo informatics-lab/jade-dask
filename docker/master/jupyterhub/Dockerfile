@@ -5,5 +5,6 @@ RUN pip install oauthenticator requests mysqlclient
 RUN pip install git+https://github.com/jupyterhub/dockerspawner.git@0.4.0
 
 ADD customspawner.py /opt/conda/lib/python3.5/customspawner.py
+ADD logo.png /root/logo.png
 
 EXPOSE 8081

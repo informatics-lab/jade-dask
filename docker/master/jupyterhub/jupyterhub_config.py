@@ -25,3 +25,6 @@ c.DockerSpawner.volumes = {'/mnt/jade-notebooks/home/{username}': '/usr/local/sh
 c.DockerSpawner.read_only_volumes = {'/mnt/jade-notebooks/data': '/data'}
 c.DockerSpawner.hub_ip_connect = requests.get("http://169.254.169.254/latest/meta-data/local-ipv4").text
 c.DockerSpawner.remove_containers = True
+
+# Custom logo
+c.JupyterHub.logo_file = '/root/logo.png'
