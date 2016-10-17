@@ -1,7 +1,7 @@
-.navbar-brand {
-    height:60px
+#header {
+    height:70px;
 }
 
-#ipython_notebook img {
+.jpy-logo {
     height: 60px;
 }
