@@ -1,2 +1,2 @@
 # jade
-Configs for JADE
+Terraform config for creating a Dask cluster. 
