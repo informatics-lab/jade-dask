@@ -1,4 +1,4 @@
-environment = "devel"
-dns = "devel.dask.informaticslab.co.uk"
+environment = "dev"
+dns = "dev.dask.informaticslab.co.uk"
 worker-name = "dev-dask-worker"
 scheduler-name = "dev-dask-scheduler"
