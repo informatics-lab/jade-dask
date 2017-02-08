@@ -46,7 +46,7 @@ resource "aws_autoscaling_group" "dask-worker" {
 
   tag {
     key                 = "environment"
-    value               = "dev"
+    value               = "${var.environment}"
     propagate_at_launch = true
   }
 }
