@@ -1,11 +1,23 @@
 module "dask-bootstrap" {
   source  = "../dask-bootstrap"
-  command = "/home/ubuntu/anaconda3/bin/dask-worker ${var.scheduler_address}:8786"
+  command = <<EOF
+docker run
+-d
+--restart always
+--cap-add SYS_ADMIN
+--device /dev/fuse
+--cap-add MKNOD
+--entrypoint /bin/bash
+quay.io/informaticslab/asn-serve -c
+"mkdir -p /usr/local/share/notebooks/data/mogreps &&
+s3fs mogreps /usr/local/share/notebooks/data/mogreps -o iam_role=jade-secrets &&
+dask-worker ${var.scheduler_address}:8786"
+EOF
 }
 
 resource "aws_launch_configuration" "dask-workers" {
-  # official anaconda ami. Needs instance type with Paravirtual support
-  image_id              = "ami-8f7617fc"
+  # Amazon Linux ami
+  image_id              = "ami-f9dd458a"
   instance_type         = "m3.large"
 
   key_name              = "gateway"

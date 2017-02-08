@@ -1,6 +1,7 @@
 module "dask-scheduler" {
   source = "../modules/dask-scheduler"
   scheduler_name = "${var.scheduler-name}"
+  environment = "dev"
 }
 
 module "dask-worker" {

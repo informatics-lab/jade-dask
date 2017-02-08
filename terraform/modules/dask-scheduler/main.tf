@@ -1,6 +1,6 @@
 module "dask-bootstrap" {
   source  = "../dask-bootstrap"
-  command = "/home/ubuntu/anaconda3/bin/dask-scheduler"
+  command = "docker run -d --expose 8787 --expose 8786 -p 8786:8786 -p 8787:8787 --restart always quay.io/informaticslab/asn-serve dask-scheduler"
 }
 
 resource "aws_security_group" "dask-scheduler" {
@@ -28,8 +28,8 @@ resource "aws_security_group_rule" "dashboard_incoming" {
 }
 
 resource "aws_instance" "dask-scheduler" {
-  # official anaconda ami. Needs instance type with Paravirtual support
-  ami           = "ami-8f7617fc"
+  # Amazon Linux ami
+  ami           = "ami-f9dd458a"
   instance_type = "m3.large"
 
   key_name             = "gateway"
@@ -39,6 +39,6 @@ resource "aws_instance" "dask-scheduler" {
 
   tags {
     Name        = "${var.scheduler_name}"
-    environment = "dev"
+    environment = "${var.environment}"
   }
 }

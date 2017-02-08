@@ -2,3 +2,4 @@ aws
 terraform.*
 *tfstate*
 *.terraform*
+*.idea*
