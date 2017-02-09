@@ -1,6 +1,6 @@
 module "dask-bootstrap" {
   source  = "../dask-bootstrap"
-  command = "docker run -d --expose 8787 --expose 8786 -p 8786:8786 -p 8787:8787 --restart always quay.io/informaticslab/asn-serve dask-scheduler"
+  command = "docker run -d --expose 8787 --expose 8786 -p 8786:8786 -p 8787:8787 --restart always quay.io/informaticslab/asn-serve:v1.0.0 dask-scheduler"
 }
 
 resource "aws_security_group" "dask-scheduler" {

@@ -8,7 +8,7 @@ docker run
 --device /dev/fuse
 --cap-add MKNOD
 --entrypoint /bin/bash
-quay.io/informaticslab/asn-serve -c
+quay.io/informaticslab/asn-serve:v1.0.0 -c
 "mkdir -p /usr/local/share/notebooks/data/mogreps &&
 s3fs mogreps /usr/local/share/notebooks/data/mogreps -o iam_role=jade-secrets &&
 dask-worker ${var.scheduler_address}:8786"
