@@ -11,6 +11,8 @@ docker run
 quay.io/informaticslab/asn-serve:v1.0.0 -c
 "mkdir -p /usr/local/share/notebooks/data/mogreps &&
 s3fs mogreps /usr/local/share/notebooks/data/mogreps -o iam_role=jade-secrets &&
+mkdir -p /usr/local/share/notebooks/data/mogreps-g &&
+s3fs mogreps-g /usr/local/share/notebooks/data/mogreps-g -o iam_role=jade-secrets &&
 dask-worker ${var.scheduler_address}:8786"
 EOF
 }
