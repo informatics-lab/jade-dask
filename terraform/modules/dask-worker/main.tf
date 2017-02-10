@@ -8,12 +8,25 @@ docker run
 --device /dev/fuse
 --cap-add MKNOD
 --entrypoint /bin/bash
-quay.io/informaticslab/asn-serve:v1.0.0 -c
+--expose 39625
+--expose 33270
+--expose 42786
+--expose 8789
+-p 39625:39625
+-p 33270:33270
+-p 42786:42786
+-p 8789:8789
+quay.io/informaticslab/asn-serve:v1.0.1 -c
 "mkdir -p /usr/local/share/notebooks/data/mogreps &&
 s3fs mogreps /usr/local/share/notebooks/data/mogreps -o iam_role=jade-secrets &&
-dask-worker ${var.scheduler_address}:8786"
+mkdir -p /usr/local/share/notebooks/data/mogreps-g &&
+s3fs mogreps-g /usr/local/share/notebooks/data/mogreps-g -o iam_role=jade-secrets &&
+dask-worker ${var.scheduler_address}:8786 --host $(wget -qO- http://instance-data/latest/meta-data/local-ipv4) --worker-port 39625 --http-port 33270 --nanny-port 42786 --bokeh-port 8789"
 EOF
 }
+
+
+
 
 resource "aws_launch_configuration" "dask-workers" {
   # Amazon Linux ami
