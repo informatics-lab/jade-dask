@@ -29,13 +29,17 @@ resource "aws_security_group_rule" "dashboard_incoming" {
 
 resource "aws_instance" "dask-scheduler" {
   # Amazon Linux ami
-  ami           = "ami-f9dd458a"
-  instance_type = "m3.large"
+  ami           = "ami-f1949e95"
+  instance_type = "m4.large"
 
-  key_name             = "gateway"
+  key_name             = "bastion"
   user_data            = "${module.dask-bootstrap.rendered}"
   iam_instance_profile = "jade-secrets"
-  security_groups      = ["default", "${aws_security_group.dask-scheduler.name}"]
+  security_groups      = ["allow_from_bastion", "${aws_security_group.dask-scheduler.name}"]
+
+  root_block_device = {
+    volume_size = 40
+  }
 
   tags {
     Name        = "${var.scheduler_name}"
