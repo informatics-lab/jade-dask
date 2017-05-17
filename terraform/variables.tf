@@ -1,7 +1,7 @@
 # variables shared by all environments
 
 provider "aws" {
-  region = "eu-west-1"
+  region = "eu-west-2"
 }
 
 variable "tf_s3_bucket" {
