@@ -54,7 +54,7 @@ resource "aws_launch_configuration" "dask-workers" {
   image_id              = "${data.aws_ami.debian.id}"
   instance_type         = "m4.large"
   root_block_device = {
-    volume_size = 40
+    volume_size = 80 
   }
 
   key_name              = "bastion"
