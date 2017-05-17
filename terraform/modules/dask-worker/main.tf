@@ -1,22 +1,29 @@
-module "dask-bootstrap" {
-  source  = "../dask-bootstrap"
-  command = <<EOF
-docker run
--d
--v /opt/data:/opt/data
---restart always
---cap-add SYS_ADMIN
---device /dev/fuse
---cap-add MKNOD
---entrypoint /bin/bash
---net=host
-quay.io/informaticslab/asn-serve:v1.0.1 -c
-"mkdir -p /usr/local/share/notebooks/data/mogreps &&
-s3fs mogreps /usr/local/share/notebooks/data/mogreps -o iam_role=jade-secrets &&
-mkdir -p /usr/local/share/notebooks/data/mogreps-g &&
-s3fs mogreps-g /usr/local/share/notebooks/data/mogreps-g -o iam_role=jade-secrets &&
-dask-worker ${var.scheduler_address}:8786 --host $(wget -qO- http://instance-data/latest/meta-data/local-ipv4) --nprocs $(grep -c ^processor /proc/cpuinfo) --nthreads 1"
-EOF
+data "template_file" "docker-compose" {
+  template = "${file("${path.module}/files/docker-compose.yml")}"
+  vars {
+    scheduler_address = "${var.scheduler_address}"
+  }
+}
+
+data "template_file" "bootstrap" {
+  template = "${file("${path.module}/files/bootstrap.tpl")}"
+  vars {
+    compose_file = "${data.template_file.docker-compose.rendered}"
+  }
+}
+
+
+data "aws_ami" "debian" {
+  filter {
+    name = "virtualization-type",
+    values = ["hvm"]
+  }
+  filter {
+    name = "name",
+    values = ["debian-jessie-*"]
+  }
+  owners = ["379101102735"]
+  most_recent = true
 }
 
 resource "aws_security_group" "dask-worker" {
@@ -39,21 +46,20 @@ resource "aws_security_group_rule" "scheduler_incoming" {
   to_port     = 65535
   protocol    = "tcp"
   cidr_blocks = ["${var.scheduler_address}/32"]
-  
+
   security_group_id = "${aws_security_group.dask-worker.id}"
 }
 
 resource "aws_launch_configuration" "dask-workers" {
-  # Amazon Linux ami
-  image_id              = "ami-f1949e95"
+  image_id              = "${data.aws_ami.debian.id}"
   instance_type         = "m4.large"
   root_block_device = {
     volume_size = 40
   }
-  
+
   key_name              = "bastion"
   iam_instance_profile  = "jade-secrets"
-  user_data             = "${module.dask-bootstrap.rendered}"
+  user_data             = "${data.template_file.bootstrap.rendered}"
   security_groups       = ["allow_from_bastion", "${aws_security_group.dask-worker.name}"]
   spot_price            = "0.1"
 }

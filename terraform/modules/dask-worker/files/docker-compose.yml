@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  dask:
+    image: quay.io/informaticslab/asn-serve:v1.0.0
+    container_name: dask
+    entrypoint: /bin/bash
+    command: -c dask-worker ${scheduler_address}:8786 --host $(wget -qO- http://instance-data/latest/meta-data/local-ipv4) --worker-port 39625 --http-port 33270 --nanny-port 42786 --bokeh-port 8789
+    network_mode: host
+    restart: always
