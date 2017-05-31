@@ -30,3 +30,4 @@ mkdir /opt/thredds && chown ec2-user /opt/thredds
 mkdir /opt/tomcat && chown ec2-user /opt/tomcat
 echo "${compose_file}" > /opt/dask-worker/docker-compose.yml
 cd /opt/dask-worker && /usr/local/bin/docker-compose up -d
+echo "${catalog_file}" > /opt/thredds/catalog.xml

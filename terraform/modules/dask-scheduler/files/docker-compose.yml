@@ -5,7 +5,7 @@ services:
     image: quay.io/informaticslab/asn-serve:v1.0.0
     container_name: dask
     entrypoint: /bin/bash
-    command: -c dask-scheduler --port 8786 --bokeh-port 8787
+    command: -c 'dask-scheduler --port 8786 --bokeh-port 8787'
     ports:
       - '8787:8787'
       - '8786:8786'
