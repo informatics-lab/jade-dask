@@ -5,7 +5,7 @@ services:
     image: quay.io/informaticslab/asn-serve:v1.0.0
     container_name: dask
     entrypoint: /bin/bash
-    command: -c dask-worker ${scheduler_address}:8786 --host $(wget -qO- http://instance-data/latest/meta-data/local-ipv4) --worker-port 39625 --http-port 33270 --nanny-port 42786 --bokeh-port 8789
+    command: -c 'dask-worker ${scheduler_address}:8786 --nprocs $(grep -c ^processor /proc/cpuinfo) --nthreads 1 --host $(wget -qO- http://instance-data/latest/meta-data/local-ipv4)' 
     network_mode: host
     restart: always
   thredds:
@@ -24,4 +24,3 @@ services:
       - THREDDS_XMX_SIZE=4G
       - THREDDS_XMS_SIZE=4G
       - TDS_HOST=http://34.252.8.97/
-

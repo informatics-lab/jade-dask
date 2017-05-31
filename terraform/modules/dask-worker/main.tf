@@ -1,14 +1,19 @@
 data "template_file" "docker-compose" {
-  template = "${file("${path.module}/files/docker-compose.yml")}"
+  template = "${file("${path.module}/files/docker-compose.tpl")}"
   vars {
     scheduler_address = "${var.scheduler_address}"
   }
+}
+
+data "template_file" "tds_catalog" {
+  template = "${file("${path.module}/files/catalog.tpl")}"
 }
 
 data "template_file" "bootstrap" {
   template = "${file("${path.module}/files/bootstrap.tpl")}"
   vars {
     compose_file = "${data.template_file.docker-compose.rendered}"
+    catalog_file = "${data.template_file.tds_catalog.rendered}"
   }
 }
 
@@ -54,7 +59,7 @@ resource "aws_launch_configuration" "dask-workers" {
   image_id              = "${data.aws_ami.debian.id}"
   instance_type         = "m4.large"
   root_block_device = {
-    volume_size = 80 
+    volume_size = 80
   }
 
   key_name              = "bastion"
