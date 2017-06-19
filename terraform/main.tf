@@ -2,6 +2,7 @@ module "dask-scheduler" {
   source = "../modules/dask-scheduler"
   scheduler_name = "${var.scheduler-name}"
   environment = "${var.environment}"
+  password = "${var.password}"
 }
 
 module "dask-worker" {
@@ -9,6 +10,7 @@ module "dask-worker" {
   scheduler_address = "${module.dask-scheduler.private_ip}"
   worker_name = "${var.worker-name}"
   environment = "${var.environment}"
+  password = "${var.password}"
 }
 
 resource "aws_route53_record" "dask" {
