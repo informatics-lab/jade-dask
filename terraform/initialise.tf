@@ -2,8 +2,6 @@
 
 variable "environment" {}
 
-variable "dns" {}
-
 variable "scheduler-name" {}
 
 variable "worker-name" {}
