@@ -1,6 +1,6 @@
 module "dask-bootstrap" {
   source  = "../dask-bootstrap"
-  command = "docker run -d --expose 8787 --expose 8786 -p 8786:8786 -p 8787:8787 --restart always quay.io/informaticslab/asn-serve:v1.0.0 dask-scheduler --port 8786 --bokeh-port 8787"
+  command = "hostname dask-scheduler.devel.jupyter.informaticslab.co.uk; docker run --ulimit nofile=100000:100000 -d --expose 8787 --expose 8786 -p 8786:8786 -p 8787:8787 --restart always quay.io/informaticslab/asn-serve:v1.0.0 dask-scheduler --port 8786 --bokeh-port 8787"
 }
 
 resource "aws_security_group" "dask-scheduler" {
@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "dashboard_incoming" {
 resource "aws_instance" "dask-scheduler" {
   # Amazon Linux ami
   ami           = "ami-f1949e95"
-  instance_type = "m4.large"
+  instance_type = "m4.xlarge"
 
   key_name             = "bastion"
   user_data            = "${module.dask-bootstrap.rendered}"

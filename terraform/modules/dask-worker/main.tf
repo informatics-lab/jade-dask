@@ -39,7 +39,7 @@ resource "aws_security_group_rule" "scheduler_incoming" {
   to_port     = 65535
   protocol    = "tcp"
   cidr_blocks = ["${var.scheduler_address}/32"]
-  
+
   security_group_id = "${aws_security_group.dask-worker.id}"
 }
 
@@ -50,7 +50,7 @@ resource "aws_launch_configuration" "dask-workers" {
   root_block_device = {
     volume_size = 40
   }
-  
+
   key_name              = "bastion"
   iam_instance_profile  = "jade-secrets"
   user_data             = "${module.dask-bootstrap.rendered}"
@@ -80,6 +80,398 @@ resource "aws_autoscaling_group" "dask-worker" {
     value               = "${var.environment}"
     propagate_at_launch = true
   }
+}
+
+resource "aws_spot_fleet_request" "dask-worker-fleet" {
+  iam_fleet_role      = "arn:aws:iam::536099501702:role/dask-data-conversion-fleet"
+  spot_price          = "1"
+  allocation_strategy = "diversified"
+  target_capacity     = 2
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "m4.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "m4.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "m4.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "m4.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "m4.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "m4.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "c4.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "c4.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "c4.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "c4.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "c4.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "c4.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "i3.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "i3.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "i3.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "i3.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "i3.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "i3.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "r4.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "r4.large"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 2
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "r4.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "r4.xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 4
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "r4.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2a"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
+  launch_specification {
+    ami                   = "ami-f1949e95"
+    instance_type         = "r4.2xlarge"
+    key_name              = "bastion"
+    iam_instance_profile  = "jade-secrets"
+    user_data             = "${module.dask-bootstrap.rendered}"
+    vpc_security_group_ids       = ["sg-df3387b6", "${aws_security_group.dask-worker.id}"]
+    spot_price            = "0.02"
+    availability_zone     = "eu-west-2b"
+    weighted_capacity     = 8
+
+    root_block_device {
+      volume_size = 20
+    }
+  }
+
 }
 
 resource "aws_autoscaling_schedule" "stop-dask-workers" {
