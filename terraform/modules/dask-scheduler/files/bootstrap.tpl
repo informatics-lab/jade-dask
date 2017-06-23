@@ -6,6 +6,7 @@ bash ~/miniconda.sh -b -p $HOME/miniconda
 export PATH="$HOME/miniconda/bin:/miniconda/bin:$PATH"
 echo "export PATH=\"$HOME/miniconda/bin:/miniconda/bin:$PATH\"" >> ~/.bashrc
 conda update --yes conda
+# TODO: fix dask and distrabuted versions
 conda install dask distributed -c conda-forge --yes
 conda install -c conda-forge iris --yes
 dask-scheduler --port 8786 --bokeh-port 8787
