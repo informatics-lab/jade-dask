@@ -9,7 +9,7 @@ module "dask-scheduler" {
 
 module "dask-worker" {
   source = "../modules/dask-worker"
-  scheduler_address = "${module.dask-scheduler.private_ip}"
+  scheduler_address = "${module.dask-scheduler.address}"
   worker_name = "${var.worker-name}"
   environment = "${var.environment}"
   password = "${var.password}"

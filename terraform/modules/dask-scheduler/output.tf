@@ -1,3 +1,3 @@
-output "private_ip" {
-  value = "${alicloud_instance.dask-scheduler.private_ip}"
+output "address" {
+  value = "${alicloud_instance.dask-scheduler.public_ip}"
 }
