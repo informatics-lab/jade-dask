@@ -1,0 +1,33 @@
+# Deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dask-scheduler
+  namespace: dask
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dask-scheduler
+    spec:
+      containers:
+        - image: daskdev/dask:latest
+          command: ["/bin/bash"]
+          args: ["/opt/scheduler/run.sh"]
+          imagePullPolicy: Always
+          name: dask-scheduler
+          ports:
+            - containerPort: 8787
+            - containerPort: 8786
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/scheduler
+      volumes:
+        - name: config-volume
+          configMap:
+            name: scheduler
