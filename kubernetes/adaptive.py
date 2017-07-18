@@ -30,7 +30,7 @@ class KubeCluster(object):
         current_deployment = self.api_instance.read_namespaced_deployments_scale(self.deployment, self.namespace)
         logger.info("Current number of workers is %s", current_deployment.spec.replicas)
         current_deployment.spec.replicas = n
-        logger.info("Scaling to %s}", current_deployment.spec.replicas)
+        logger.info("Scaling to %s", current_deployment.spec.replicas)
         try:
             self.api_instance.replace_namespaced_deployments_scale(
                 self.deployment, self.namespace, current_deployment)
@@ -48,18 +48,20 @@ class KubeCluster(object):
         This can be implemented either as a function or as a Tornado coroutine.
         """
         logger.info("Scaling down")
-        # if workers:
-        current_deployment = self.api_instance.read_namespaced_deployments_scale(self.deployment, self.namespace)
-        if current_deployment.spec.replicas is None:
-            current_deployment.spec.replicas = 0
-        logger.info("Current number of workers is %s", current_deployment.spec.replicas)
-        current_deployment.spec.replicas = current_deployment.spec.replicas - len(workers)
-        logger.info("Scaling to %s", current_deployment.spec.replicas)
-        try:
-            self.api_instance.replace_namespaced_deployments_scale(
-                self.deployment, self.namespace, current_deployment)
-        except ApiException as e:
-            logger.error("Exception when scaling up {}: {}".format(self.deployment, e))
+        if workers:
+            current_deployment = self.api_instance.read_namespaced_deployments_scale(self.deployment, self.namespace)
+            if current_deployment.spec.replicas is None:
+                current_deployment.spec.replicas = 0
+            logger.info("Current number of workers is %s", current_deployment.spec.replicas)
+            current_deployment.spec.replicas = current_deployment.spec.replicas - len(workers)
+            logger.info("Scaling to %s", current_deployment.spec.replicas)
+            try:
+                self.api_instance.replace_namespaced_deployments_scale(
+                    self.deployment, self.namespace, current_deployment)
+            except ApiException as e:
+                logger.error("Exception when scaling up {}: {}".format(self.deployment, e))
+        else:
+            logger.info("Nothing to do")
 
 
 def dask_setup(scheduler):
