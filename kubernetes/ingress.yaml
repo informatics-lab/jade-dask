@@ -1,0 +1,22 @@
+# Ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dask-dashboard.informaticslab.co.uk
+  namespace: dask
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - dask-dashboard.informaticslab.co.uk
+    secretName: dask-dashboard-tls
+  rules:
+  - host: dask-dashboard.informaticslab.co.uk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: dask-scheduler-dashboard
+          servicePort: 80

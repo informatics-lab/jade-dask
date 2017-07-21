@@ -1,0 +1,25 @@
+# Service
+kind: Service
+metadata:
+  name: dask-scheduler-dashboard
+  namespace: dask
+spec:
+  ports:
+    - port: 80
+      targetPort: 8787
+      protocol: TCP
+  selector:
+    app: dask-scheduler
+---
+# Service
+kind: Service
+metadata:
+  name: dask-scheduler
+  namespace: dask
+spec:
+  ports:
+    - port: 8786
+      targetPort: 8786
+      protocol: TCP
+  selector:
+    app: dask-scheduler
