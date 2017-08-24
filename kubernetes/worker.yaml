@@ -1,0 +1,43 @@
+# Deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dask-workers
+  namespace: dask
+spec:
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: dask-workers
+    spec:
+      containers:
+        - image: daskdev/dask:latest
+          command: ["sh", "-c"]
+          args:
+            - dask-worker $DASK_SCHEDULER_SERVICE_HOST:$DASK_SCHEDULER_SERVICE_PORT --nprocs 1 --nthreads 1 --host $POD_IP --name $POD_NAME
+          imagePullPolicy: Always
+          name: dask-worker
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: no-worker-disruption
+spec:
+  selector:
+    matchLabels:
+      app: dask-workers
+  minAvailable: 100%
