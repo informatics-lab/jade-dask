@@ -4,10 +4,17 @@ import os
 from distributed.deploy import Adaptive
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
-
+from datetime import datetime
 
 logger = logging.getLogger("distributed.deploy.adaptive")
 
+
+scale_times = {'up':datetime.now()}
+
+class SlowCoolDownAdaptive(Adaptive):
+    def should_scale_down(self):
+       last_scale_up_ago = (datetime.now() - scale_times['up']).total_seconds()
+       return last_scale_ago > 3 * 60 # Wait three minutes from scale up to scale down.
 
 class KubeCluster(object):
     def __init__(self, **kwargs):
@@ -34,6 +41,7 @@ class KubeCluster(object):
         try:
             self.api_instance.replace_namespaced_deployments_scale(
                 self.deployment, self.namespace, current_deployment)
+            scale_times['up'] = datetime.now()
         except ApiException as e:
             logger.error("Exception when scaling up {}: {}".format(self.deployment, e))
 
@@ -66,4 +74,4 @@ class KubeCluster(object):
 
 def dask_setup(scheduler):
     cluster = KubeCluster()
-    adapative_cluster = Adaptive(scheduler, cluster)
+    adapative_cluster = SlowCoolDownAdaptive(scheduler, cluster)

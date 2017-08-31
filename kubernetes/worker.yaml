@@ -15,7 +15,7 @@ spec:
         - image: daskdev/dask:latest
           command: ["sh", "-c"]
           args:
-            - dask-worker $DASK_SCHEDULER_SERVICE_HOST:$DASK_SCHEDULER_SERVICE_PORT --nprocs 1 --nthreads 1 --host $POD_IP --name $POD_NAME
+            - dask-worker $DASK_SCHEDULER_SERVICE_HOST:$DASK_SCHEDULER_SERVICE_PORT --nprocs 1 --nthreads 1 --host $POD_IP --memory-limit  4.295e+9 --name $POD_NAME
           imagePullPolicy: Always
           name: dask-worker
           env:
@@ -30,7 +30,10 @@ spec:
           resources:
             requests:
               cpu: 1000m
-              memory: 2Gi
+              memory: 4Gi
+            limits:
+              memory: 4Gi
+              cpu: 1000m
 ---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
