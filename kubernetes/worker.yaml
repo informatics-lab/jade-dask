@@ -29,8 +29,8 @@ spec:
                   fieldPath: metadata.name
           resources:
             requests:
-              cpu: 100m
-              memory: 1Gi
+              cpu: 1000m
+              memory: 2Gi
 ---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
