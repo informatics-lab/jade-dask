@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Install deps
+conda update -n dask distributed -y
 pip install kubernetes
 
 # Start scheduler

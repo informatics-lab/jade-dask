@@ -15,7 +15,7 @@ spec:
         - image: daskdev/dask:latest
           command: ["sh", "-c"]
           args:
-            - dask-worker $DASK_SCHEDULER_SERVICE_HOST:$DASK_SCHEDULER_SERVICE_PORT --nprocs 1 --nthreads 1 --host $POD_IP --name $POD_NAME
+            - conda update -n dask distributed -y && dask-worker $DASK_SCHEDULER_SERVICE_HOST:$DASK_SCHEDULER_SERVICE_PORT --nprocs 1 --nthreads 1 --host $POD_IP --name $POD_NAME
           imagePullPolicy: Always
           name: dask-worker
           env:

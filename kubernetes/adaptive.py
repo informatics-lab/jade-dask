@@ -4,10 +4,30 @@ import os
 from distributed.deploy import Adaptive
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
-
+from datetime import datetime
 
 logger = logging.getLogger("distributed.deploy.adaptive")
 
+
+class LaggedScaleDown(Adaptive):
+    
+    def __init__(self, *args, **kwargs):
+        logger.info("Initialising LaggedScaleDown Adaptive")
+        super().__init__(*args, **kwargs)
+
+    def should_scale_down(self):
+        logger.info("Test if should scale down")
+        try:
+            last_scale_up = self.cluster.last_scale_up
+            logger.info("Last scale up at %s" % last_scale_up)
+            should_scale_down =  (datetime.now() - last_scale_up).total_seconds() > 60
+        except (TypeError, AttributeError) as e:
+            logger.warn("Exception when testting if should scale down. Will assume should scale down.", exc_info=True)
+            should_scale_down = True
+        
+        logger.info("Should scale down" if should_scale_down else "Should not scale down")
+        return should_scale_down
+        
 
 class KubeCluster(object):
     def __init__(self, **kwargs):
@@ -15,6 +35,7 @@ class KubeCluster(object):
         self.api_instance = client.ExtensionsV1beta1Api()
         self.namespace = 'dask'
         self.deployment = 'dask-workers'
+        self.last_scale_up = datetime.now()
         logger.info("Initialising kubernetes scaler")
 
     def scale_up(self, n):
@@ -34,6 +55,7 @@ class KubeCluster(object):
         try:
             self.api_instance.replace_namespaced_deployment_scale(
                 self.deployment, self.namespace, current_deployment)
+            self.last_scale_up = datetime.now()
         except ApiException as e:
             logger.error("Exception when scaling up {}: {}".format(self.deployment, e))
 
@@ -66,4 +88,4 @@ class KubeCluster(object):
 
 def dask_setup(scheduler):
     cluster = KubeCluster()
-    adapative_cluster = Adaptive(scheduler, cluster)
+    adapative_cluster = LaggedScaleDown(scheduler, cluster)
