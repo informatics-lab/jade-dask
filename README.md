@@ -1,3 +1,5 @@
+⛔️ [Deprecated]: This project has been superseded by [daskernetes](https://github.com/dask/daskernetes) which was inspired by this project but is a more general use a flexible way of using dask clusters on Kubernetes.
+
 # jade
 Terraform config for creating a Dask cluster. 
 
